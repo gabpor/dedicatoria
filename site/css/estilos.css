@@ -1,0 +1,2 @@
+:root { --azul: #1d4ed8; --amarillo: #facc15; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--azul); color: var(--amarillo); font-family: system-ui, sans-serif; text-align: center; }

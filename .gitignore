@@ -1,0 +1,9 @@
+# Documentos internos con el secreto: nunca al repositorio
+PLAN.md
+CLAUDE.md
+.claude/
+
+# Sistema
+.DS_Store
+Thumbs.db
+node_modules/
