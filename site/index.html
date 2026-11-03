@@ -1,16 +1,263 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Para ti</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0c1f5c">
+  <title>Pentru tine</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cg fill='%23facc15'%3E%3Ccircle cx='-17' cy='-17' r='27'/%3E%3Ccircle cx='17' cy='-17' r='27'/%3E%3Ccircle cx='17' cy='17' r='27'/%3E%3Ccircle cx='-17' cy='17' r='27'/%3E%3C/g%3E%3Ccircle r='12' fill='%230c1f5c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-  <main>
-    <h1>Para ti</h1>
-    <p>Arranca el motor…</p>
-  </main>
-  <script src="js/main.js"></script>
+
+<noscript><p style="padding:2rem;font-family:sans-serif">Pagina aceasta are nevoie de JavaScript.</p></noscript>
+
+<!-- Piezas SVG compartidas (sprite en línea: así CSS puede animarlas) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Grano de impresión -->
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="r"/>
+      <feColorMatrix in="r" type="matrix" values="0 0 0 0 0.04  0 0 0 0 0.12  0 0 0 0 0.36  1.6 0 0 0 -0.62"/>
+    </filter>
+
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4f86ee"/>
+      <stop offset=".5" stop-color="#86aef5"/>
+      <stop offset=".68" stop-color="#f3d9c4"/>
+    </linearGradient>
+
+    <!-- Rueda de radios -->
+    <g id="rueda">
+      <circle r="46" fill="#0c1f5c"/>
+      <circle r="41" fill="none" stroke="#1d4ed8" stroke-width="1.5"/>
+      <circle r="33" fill="#0c1f5c" stroke="#e0a800" stroke-width="5"/>
+      <circle r="19" fill="none" stroke="#fff4d6" stroke-width="22" stroke-dasharray="1.5 5.13" opacity=".9"/>
+      <circle r="7" fill="#facc15" stroke="#0c1f5c" stroke-width="2"/>
+    </g>
+
+    <clipPath id="cuerpoClip">
+      <path d="M54 164C76 142 128 124 212 119L292 117L297 128L384 128L389 113L546 107Q570 107 572 128L572 162Q572 174 558 174L96 174Q62 174 54 164Z"/>
+    </clipPath>
+
+    <!-- Coche de carreras de perfil (mira a la derecha) -->
+    <symbol id="coche" viewBox="0 0 640 230">
+      <path class="bufanda" d="M328 100C308 92 292 104 266 96C284 113 302 113 324 112Z" fill="#ef7a63"/>
+      <path d="M54 164C76 142 128 124 212 119L292 117L297 128L384 128L389 113L546 107Q570 107 572 128L572 162Q572 174 558 174L96 174Q62 174 54 164Z" fill="#facc15"/>
+      <g clip-path="url(#cuerpoClip)">
+        <path d="M0 148L640 140L640 230L0 230Z" fill="#e0a800"/>
+      </g>
+      <path d="M394 115L544 110" stroke="#fff4d6" stroke-width="3" stroke-linecap="round" opacity=".6" fill="none"/>
+      <path d="M418 128H506" stroke="#0c1f5c" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 14" fill="none"/>
+      <path d="M426 141H510" stroke="#0c1f5c" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 14" fill="none"/>
+      <circle cx="250" cy="138" r="13" fill="#fff4d6"/>
+      <circle cx="250" cy="138" r="8" fill="none" stroke="#ef7a63" stroke-width="3.5"/>
+      <path d="M232 160H540" stroke="#0c1f5c" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M238 158H304" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <rect x="566" y="113" width="18" height="58" rx="8" fill="#e0a800"/>
+      <path d="M570 128h10M570 142h10M570 156h10" stroke="#0c1f5c" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M306 130C304 112 318 104 336 104C350 104 360 110 364 120L380 116L383 123L364 132L340 134Z" fill="#0c1f5c"/>
+      <circle cx="336" cy="88" r="15" fill="#0c1f5c"/>
+      <circle cx="346" cy="95" r="7" fill="#fff4d6"/>
+      <rect x="341" y="82" width="15" height="9" rx="3.5" fill="#fff4d6"/>
+      <rect x="344" y="84.5" width="9" height="4" rx="2" fill="#0c1f5c"/>
+      <path d="M321 85L341 87" stroke="#fff4d6" stroke-width="2"/>
+      <ellipse cx="388" cy="112" rx="4" ry="12" transform="rotate(-18 388 112)" fill="none" stroke="#0c1f5c" stroke-width="3"/>
+      <path d="M386 121L377 131" stroke="#0c1f5c" stroke-width="3" stroke-linecap="round"/>
+      <g transform="translate(150 168)"><g class="gira"><use href="#rueda"/></g></g>
+      <g transform="translate(508 168)"><g class="gira"><use href="#rueda"/></g></g>
+    </symbol>
+
+    <!-- Cabeza de amapola (vista frontal). Colores por variables CSS -->
+    <g id="cabeza">
+      <g transform="rotate(40)"><ellipse class="p" cy="-20" rx="24" ry="27"/><ellipse class="s" cy="-8" rx="13" ry="11"/></g>
+      <g transform="rotate(130)"><ellipse class="p" cy="-20" rx="21" ry="26"/><ellipse class="s" cy="-8" rx="12" ry="10"/></g>
+      <g transform="rotate(220)"><ellipse class="p" cy="-20" rx="24" ry="27"/><ellipse class="s" cy="-8" rx="13" ry="11"/></g>
+      <g transform="rotate(310)"><ellipse class="p" cy="-20" rx="21" ry="26"/><ellipse class="s" cy="-8" rx="12" ry="10"/></g>
+      <circle class="e" r="14" fill="none" stroke-width="6" stroke-dasharray="1.4 3.78"/>
+      <circle class="n" r="9"/>
+    </g>
+
+    <!-- Amapola bicolor: pétalos amarillos con mancha azul -->
+    <g id="cabeza-bi">
+      <g transform="rotate(40)"><ellipse cy="-20" rx="24" ry="27" fill="#facc15"/><ellipse cy="-9" rx="17" ry="16" fill="#1d4ed8"/></g>
+      <g transform="rotate(130)"><ellipse cy="-20" rx="21" ry="26" fill="#facc15"/><ellipse cy="-9" rx="15" ry="15" fill="#1d4ed8"/></g>
+      <g transform="rotate(220)"><ellipse cy="-20" rx="24" ry="27" fill="#facc15"/><ellipse cy="-9" rx="17" ry="16" fill="#1d4ed8"/></g>
+      <g transform="rotate(310)"><ellipse cy="-20" rx="21" ry="26" fill="#facc15"/><ellipse cy="-9" rx="15" ry="15" fill="#1d4ed8"/></g>
+      <circle r="14" fill="none" stroke="#fff4d6" stroke-width="6" stroke-dasharray="1.4 3.78"/>
+      <circle r="9" fill="#0c1f5c"/>
+    </g>
+
+    <!-- Nube con sombra rosada -->
+    <g id="nube">
+      <path transform="translate(0 6)" d="M0 30C0 10 22 8 30 18C36 0 66 0 72 20C90 14 104 28 96 40L8 40C0 40 0 34 0 30Z" fill="#f3b3b3" opacity=".75"/>
+      <path d="M0 30C0 10 22 8 30 18C36 0 66 0 72 20C90 14 104 28 96 40L8 40C0 40 0 34 0 30Z" fill="#fff4d6"/>
+    </g>
+
+    <!-- Colinas que se repiten sin costura (ancho 1280) -->
+    <path id="colina-lejana" d="M0 430C120 380 240 370 360 400C480 430 560 360 700 365C840 370 920 430 1040 410C1140 395 1220 410 1280 430L1280 720L0 720Z"/>
+    <path id="colina-media" d="M0 480C140 440 260 450 380 475C500 500 580 450 720 450C860 450 960 500 1080 485C1170 474 1230 470 1280 480L1280 720L0 720Z"/>
+    <path id="colina-cercana" d="M0 520C160 495 300 505 440 520C600 538 720 495 880 498C1020 500 1160 520 1280 520L1280 720L0 720Z"/>
+
+    <!-- Franja de campo con amapolas (ancho 1280) -->
+    <g id="campo-tile">
+      <path d="M0 656C160 646 320 664 480 654C640 644 800 662 960 652C1100 645 1200 658 1280 656L1280 720L0 720Z" fill="#facc15"/>
+      <path d="M0 690C200 680 400 700 640 690C880 680 1080 698 1280 690L1280 720L0 720Z" fill="#e0a800"/>
+      <g stroke="#2b6f62" stroke-width="3" stroke-linecap="round" fill="none">
+        <path d="M110 720V686M330 720V682M560 720V690M790 720V684M1000 720V688M1190 720V684"/>
+      </g>
+      <use href="#cabeza" transform="translate(110 676) scale(.34)" style="--petalo:#ef7a63;--sombra:#c4503f;--centro:#facc15"/>
+      <use href="#cabeza" transform="translate(330 672) scale(.4)" style="--petalo:#1d4ed8;--sombra:#0c1f5c;--centro:#fff4d6"/>
+      <use href="#cabeza" transform="translate(560 680) scale(.3)" style="--petalo:#f4a3b5;--sombra:#d9708c;--centro:#0c1f5c"/>
+      <use href="#cabeza" transform="translate(790 674) scale(.36)" style="--petalo:#a99be8;--sombra:#6f5fc4;--centro:#facc15"/>
+      <use href="#cabeza" transform="translate(1000 678) scale(.32)" style="--petalo:#f5a04a;--sombra:#d4772a;--centro:#0c1f5c"/>
+      <use href="#cabeza" transform="translate(1190 674) scale(.38)" style="--petalo:#5b8ff0;--sombra:#2f63e6;--centro:#fff4d6"/>
+    </g>
+
+    <!-- Icono de altavoz -->
+    <symbol id="icono-altavoz" viewBox="0 0 24 24">
+      <path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>
+      <path class="ondas" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path class="tachado" d="M4 4l16 16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main id="juego">
+
+  <header class="hud">
+    <div class="hud-nivel oculto" id="hud-nivel" aria-live="polite">
+      <span class="hud-etiqueta" id="hud-numero">Nivelul 0</span>
+      <span class="hud-titulo" id="hud-titulo">Pornirea</span>
+    </div>
+    <div class="hud-flores oculto" id="hud-flores" role="img" aria-label="Flori adunate"></div>
+    <div class="radio-control" id="radio-control" hidden>
+      <button class="radio-boton" id="radio-boton" type="button" aria-pressed="true" aria-label="Oprește sau pornește sunetul">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icono-altavoz"/></svg>
+      </button>
+      <input class="radio-volumen" id="radio-volumen" type="range" min="0" max="100" step="1" value="35" aria-label="Volumul muzicii">
+    </div>
+  </header>
+
+  <!-- NIVEL 0 · Pornirea -->
+  <section class="nivel" id="nivel-0" aria-labelledby="n0-titlu">
+
+    <svg class="escena" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <rect width="1280" height="720" fill="url(#cielo)"/>
+
+      <g class="estrellas" fill="#fff4d6">
+        <circle cx="120" cy="90" r="2.2"/><circle cx="260" cy="150" r="1.6"/><circle cx="380" cy="60" r="2"/>
+        <circle cx="520" cy="120" r="1.8"/><circle cx="690" cy="70" r="2.4"/><circle cx="820" cy="140" r="1.6"/>
+        <circle cx="1010" cy="60" r="2"/><circle cx="1130" cy="120" r="2.2"/><circle cx="1200" cy="210" r="1.6"/>
+        <circle cx="70" cy="230" r="1.8"/><circle cx="940" cy="240" r="1.6"/><circle cx="600" cy="240" r="1.4"/>
+      </g>
+
+      <g class="sol">
+        <circle cx="1000" cy="190" r="86" fill="#fff4d6" opacity=".22"/>
+        <circle cx="1000" cy="190" r="52" fill="#ffe9a8"/>
+      </g>
+
+      <g transform="translate(110 100) scale(2)"><use class="nube" href="#nube"/></g>
+      <g transform="translate(560 50) scale(1.5)"><use class="nube b" href="#nube"/></g>
+      <g transform="translate(860 300) scale(1.1)" opacity=".9"><use class="nube" href="#nube"/></g>
+
+      <g class="capa lejana" fill="#8aa0f0">
+        <use href="#colina-lejana"/><use href="#colina-lejana" x="1280"/>
+      </g>
+      <g class="capa media" fill="#2f63e6">
+        <use href="#colina-media"/><use href="#colina-media" x="1280"/>
+      </g>
+      <g class="capa cercana" fill="#2f9e8c">
+        <use href="#colina-cercana"/><use href="#colina-cercana" x="1280"/>
+      </g>
+
+      <!-- carretera -->
+      <rect y="556" width="1280" height="96" fill="#0c1f5c"/>
+      <path d="M0 560H1280" stroke="#fff4d6" stroke-width="3" opacity=".5"/>
+      <path class="carretera" d="M0 606H1280" stroke="#fff4d6" stroke-width="5" stroke-dasharray="40 30" opacity=".9"/>
+
+      <g class="capa campo">
+        <use href="#campo-tile"/><use href="#campo-tile" x="1280"/>
+      </g>
+
+      <rect class="oscuridad" width="1280" height="720" fill="#0a1a52"/>
+
+      <!-- coche -->
+      <ellipse cx="560" cy="636" rx="290" ry="9" fill="#06113a" opacity=".5"/>
+      <g class="coche-sale"><g class="coche-tose"><g class="coche-rebota">
+        <use href="#coche" x="320" y="471.5" width="480" height="172.5"/>
+        <g class="humo" fill="#fff4d6">
+          <circle class="puf puf1" cx="352" cy="592" r="9"/>
+          <circle class="puf puf2" cx="352" cy="592" r="9"/>
+          <circle class="puf puf3" cx="352" cy="592" r="9"/>
+        </g>
+      </g></g>
+
+      <!-- Viñeta: el piloto "habla" (mensajes cortos). La punta apunta a su cabeza. -->
+      <foreignObject class="vineta-caja" x="528" y="372" width="560" height="150">
+        <div xmlns="http://www.w3.org/1999/xhtml" class="vineta" aria-hidden="true"><p id="n0-vineta-texto"></p></div>
+      </foreignObject>
+      </g>
+
+      <rect width="1280" height="720" filter="url(#grano)" opacity=".5" style="pointer-events:none"/>
+    </svg>
+
+    <h1 class="sr-only" id="n0-titlu">Pornește motorul</h1>
+
+    <p class="pista-clic" id="n0-pista-clic" hidden>Apasă oriunde pentru a continua</p>
+
+    <!-- Entrada de la palabra: aparece cuando el piloto termina de hablar -->
+    <div class="acceso" id="n0-acceso" hidden>
+      <form id="n0-formular" autocomplete="off" novalidate>
+        <label class="sr-only" for="n0-cuvant">Cuvântul secret</label>
+        <input id="n0-cuvant" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="40" placeholder="scrie aici…">
+        <button class="boton" type="submit">Pornește motorul</button>
+      </form>
+
+      <button class="enlace" id="n0-indiciu" type="button">Am nevoie de un indiciu</button>
+    </div>
+    <p class="mesaj sr-only" id="n0-mesaj" role="status" aria-live="polite"></p>
+
+    <aside class="notas" id="n0-notas" aria-label="Indicii" hidden>
+      <ol class="lista-indicii" id="n0-indicii"></ol>
+    </aside>
+
+    <div class="panel panel-versiculo" id="n0-versiculo" hidden>
+      <svg class="flor-grande" viewBox="0 0 140 200" aria-hidden="true">
+        <path class="tallo" d="M70 200C68 160 72 126 70 96" fill="none" stroke="#2b6f62" stroke-width="5" stroke-linecap="round"/>
+        <path class="hoja" d="M70 160C40 154 22 130 26 110C52 116 68 136 70 160Z" fill="#5aa88a"/>
+        <path class="hoja" d="M70 140C98 134 116 112 112 94C88 100 72 118 70 140Z" fill="#5aa88a"/>
+        <g transform="translate(70 70)"><g class="cabeza-anim"><use href="#cabeza" style="--petalo:#facc15;--sombra:#e0a800;--centro:#0c1f5c"/></g></g>
+      </svg>
+      <div class="texto-versiculo">
+        <p class="etiqueta">Prima floare a drumului</p>
+        <blockquote>
+          <p>Și dacă se scoală cineva asupra unuia, doi pot să-i stea împotrivă; și funia împletită în trei nu se rupe ușor.</p>
+          <footer>Ecleziastul 4:12</footer>
+        </blockquote>
+        <button class="boton" id="n0-continua" type="button">Mai departe</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Radio del coche (reproductor de YouTube). Se muestra sola si el navegador bloquea el sonido o falla -->
+<aside class="radio-panel cerrado" id="radio-panel" aria-label="Radioul mașinii">
+  <div class="radio-cabecera">
+    <span class="radio-titulo">Radioul mașinii</span>
+    <button type="button" class="radio-cerrar" id="radio-cerrar" aria-label="Închide radioul">&times;</button>
+  </div>
+  <div id="radio-reproductor"></div>
+  <p class="radio-nota" id="radio-nota" role="status"></p>
+</aside>
+
+<script src="js/utiles.js"></script>
+<script src="js/radio.js"></script>
+<script src="js/sonidos.js"></script>
+<script src="js/dialogo.js"></script>
+<script src="js/main.js"></script>
+<script src="js/niveles/nivel0.js"></script>
 </body>
 </html>

@@ -7,3 +7,9 @@ CLAUDE.md
 .DS_Store
 Thumbs.db
 node_modules/
+
+# Referencias visuales con derechos de terceros: nunca al repositorio
+inspiraciones/
+
+# Pruebas de estilo locales: no se publican hasta aprobarlas
+pruebas/

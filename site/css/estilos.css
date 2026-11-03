@@ -1,2 +1,215 @@
-:root { --azul: #1d4ed8; --amarillo: #facc15; }
-body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--azul); color: var(--amarillo); font-family: system-ui, sans-serif; text-align: center; }
+/* ===== Fuentes (autoalojadas; cubren ă â î ș ț) ===== */
+@font-face{font-family:'Baloo 2';font-style:normal;font-weight:800;font-display:swap;src:url('../assets/fonts/baloo2-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Baloo 2';font-style:normal;font-weight:800;font-display:swap;src:url('../assets/fonts/baloo2-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400 800;font-display:swap;src:url('../assets/fonts/nunito-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400 800;font-display:swap;src:url('../assets/fonts/nunito-latin.woff2') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
+/* ===== Paleta y base ===== */
+:root{
+  --azul:#1d4ed8; --azul-oscuro:#0c1f5c; --azul-medio:#2f63e6; --azul-cielo:#5b8ff0;
+  --amarillo:#facc15; --ambar:#e0a800; --crema:#fff4d6;
+  --coral:#ef7a63; --coral-oscuro:#b8432f; --rosa:#f4a3b5; --lila:#a99be8; --naranja:#f5a04a; --menta:#5fc4b0;
+  --salvia:#5aa88a; --tallo:#2b6f62;
+  --fuente-titulo:'Baloo 2','Nunito',system-ui,sans-serif;
+  --fuente:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--azul-oscuro);color:var(--azul-oscuro);font-family:var(--fuente);font-size:clamp(17px,1.25vw,21px);line-height:1.5;overflow:hidden}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[hidden]{display:none!important}
+
+/* Colores de la amapola (por variables, para reutilizarla en cada nivel) */
+.p{fill:var(--petalo)}
+.s{fill:var(--sombra);opacity:var(--op,.55)}
+.e{stroke:var(--centro)}
+.n{fill:var(--nucleo,#0c1f5c)}
+
+/* ===== Estructura ===== */
+#juego{position:fixed;inset:0}
+.nivel{position:absolute;inset:0;display:none}
+.nivel.activo{display:block}
+.nivel.entrando{animation:entra .9s ease both}
+.nivel.saliendo{animation:sale .6s ease both}
+@keyframes entra{from{opacity:0}to{opacity:1}}
+@keyframes sale{to{opacity:0}}
+
+/* ===== HUD ===== */
+.hud{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;pointer-events:none}
+.hud-nivel{display:flex;align-items:center;gap:10px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;padding:4px 18px 4px 6px;box-shadow:0 4px 0 var(--azul-oscuro)}
+.hud-nivel{transition:opacity .7s ease,transform .7s cubic-bezier(.2,1.3,.4,1)}
+.hud-nivel.oculto{opacity:0;transform:translateY(-14px);visibility:hidden}
+.hud-etiqueta{background:var(--coral);color:#fff;font-family:var(--fuente-titulo);font-weight:800;font-size:.85em;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:1px 12px}
+.hud-titulo{font-family:var(--fuente-titulo);font-weight:800;color:var(--azul)}
+/* Flores del camino: siempre las nueve a la vista, apagadas (grises) hasta superar cada nivel */
+.hud-flores{position:absolute;left:50%;top:14px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:3px 12px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);transition:opacity .7s ease,transform .7s cubic-bezier(.2,1.3,.4,1)}
+.hud-flores.oculto{opacity:0;transform:translateX(-50%) translateY(-14px);visibility:hidden}
+.hud-flor{width:30px;height:30px;overflow:visible;transition:filter .5s ease,opacity .5s ease,transform .5s ease}
+.hud-flor.apagada{filter:grayscale(1);opacity:.42;transform:scale(.78)}
+.hud-flor.encendida{animation:activa .85s cubic-bezier(.2,1.4,.4,1) both}
+.hud-flor.rapida{animation:none}
+@keyframes activa{0%{transform:scale(.78) rotate(0);filter:grayscale(1);opacity:.42}45%{transform:scale(1.5) rotate(-14deg);filter:none;opacity:1}100%{transform:scale(1) rotate(0);filter:none;opacity:1}}
+.radio-boton{pointer-events:auto;width:46px;height:46px;border-radius:50%;border:3px solid var(--azul-oscuro);background:var(--crema);color:var(--azul);box-shadow:0 4px 0 var(--azul-oscuro);display:grid;place-items:center;cursor:pointer;padding:0}
+.radio-boton svg{width:26px;height:26px}
+.radio-boton .tachado{opacity:0}
+.radio-boton[aria-pressed="false"] .ondas{opacity:0}
+.radio-boton[aria-pressed="false"] .tachado{opacity:1}
+.radio-boton:active{transform:translateY(3px);box-shadow:0 1px 0 var(--azul-oscuro)}
+
+/* Control de música: botón de silenciar + deslizador de volumen en una misma pastilla */
+.radio-control{pointer-events:auto;display:flex;align-items:center;gap:12px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);padding:3px 16px 3px 3px}
+.radio-control .radio-boton{width:38px;height:38px;border:0;box-shadow:none;background:var(--amarillo);color:var(--azul-oscuro)}
+.radio-control .radio-boton:active{transform:scale(.92);box-shadow:none}
+.radio-volumen{-webkit-appearance:none;appearance:none;width:112px;height:8px;margin:0;border-radius:99px;background:linear-gradient(to right,var(--azul) var(--nivel,35%),#c9d3f3 var(--nivel,35%));cursor:pointer}
+.radio-volumen::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--amarillo);border:3px solid var(--azul-oscuro)}
+.radio-volumen::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--amarillo);border:3px solid var(--azul-oscuro)}
+.radio-volumen::-moz-range-track{background:transparent}
+.radio-volumen:focus-visible{outline:3px solid var(--amarillo);outline-offset:5px}
+.radio-boton:focus-visible,.boton:focus-visible,input:focus-visible{outline:4px solid var(--amarillo);outline-offset:2px}
+/* Radio del coche: siempre dentro de la ventana (el audio no se corta); cerrada = transparente */
+.radio-panel{position:fixed;right:16px;bottom:16px;z-index:40;width:388px;max-width:calc(100vw - 32px);background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:16px;box-shadow:0 6px 0 var(--azul-oscuro),0 18px 32px rgba(6,17,58,.3);padding:8px 10px 10px;transition:opacity .5s ease,transform .5s ease}
+.radio-panel.cerrado{opacity:.01;transform:translateY(14px);pointer-events:none}
+.radio-cabecera{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.radio-titulo{font-family:var(--fuente-titulo);font-weight:800;color:var(--azul)}
+.radio-cerrar{font:inherit;font-weight:800;font-size:1.3em;line-height:1;width:30px;height:30px;border:2px solid var(--azul-oscuro);border-radius:8px;background:#fff;color:var(--azul-oscuro);cursor:pointer;padding:0}
+.radio-panel iframe{display:block;width:100%;height:auto;aspect-ratio:356/200;border:0;border-radius:8px;background:#000}
+.radio-nota{margin:8px 2px 0;font-weight:700;color:var(--azul-oscuro);min-height:1.2em}
+.radio-nota:empty{display:none}
+
+/* ===== Escena ===== */
+.escena{position:absolute;inset:0;width:100%;height:100%;display:block;--giro:paused}
+.escena.rodando{--giro:running}
+.capa{animation:desliza linear infinite;animation-play-state:var(--giro,paused)}
+.capa.lejana{animation-duration:140s}
+.capa.media{animation-duration:70s}
+.capa.cercana{animation-duration:34s}
+.capa.campo{animation-duration:7s}
+@keyframes desliza{to{transform:translateX(-1280px)}}
+.carretera{animation:carretera .285s linear infinite;animation-play-state:var(--giro,paused)}
+@keyframes carretera{to{stroke-dashoffset:-70}}
+.nube{animation:nube 30s ease-in-out infinite alternate}
+.nube.b{animation-duration:42s}
+@keyframes nube{to{transform:translateX(60px)}}
+
+.oscuridad{opacity:.55;transition:opacity 2.2s ease;pointer-events:none}
+.escena.encendida .oscuridad{opacity:0}
+.estrellas{transition:opacity 1.6s ease}
+.escena.encendida .estrellas{opacity:0}
+.sol{transform:translateY(340px);transition:transform 4.5s cubic-bezier(.2,.7,.2,1)}
+.escena.encendida .sol{transform:translateY(0)}
+
+/* Coche: ruedas y bufanda dependen de --giro (hereda a través del <use>) */
+.gira{transform-box:fill-box;transform-origin:center;animation:gira .7s linear infinite;animation-play-state:var(--giro,paused)}
+@keyframes gira{to{transform:rotate(360deg)}}
+.bufanda{transform-box:fill-box;transform-origin:right center;animation:bufanda .35s ease-in-out infinite alternate;animation-play-state:var(--giro,paused)}
+@keyframes bufanda{to{transform:skewY(-6deg) scaleX(1.08)}}
+.escena.rodando .coche-rebota{animation:rebota .7s ease-in-out infinite alternate}
+@keyframes rebota{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+.coche-tose.tose{animation:tose .55s linear 2}
+@keyframes tose{0%,100%{transform:translate(0,0)}15%{transform:translate(-3px,1px)}30%{transform:translate(3px,-1px)}45%{transform:translate(-2.5px,1.5px)}60%{transform:translate(2.5px,-1px)}75%{transform:translate(-2px,0)}90%{transform:translate(1.5px,1px)}}
+.coche-sale{transition:transform 1.7s cubic-bezier(.5,0,.9,.5)}
+.escena.sale .coche-sale{transform:translateX(1150px)}
+
+.puf{opacity:0;transform-box:fill-box;transform-origin:center}
+.escena.humo-activo .puf{animation:puf 1s ease-out infinite}
+.puf2{animation-delay:.18s!important}
+.puf3{animation-delay:.36s!important}
+@keyframes puf{0%{opacity:.85;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(-70px,-38px) scale(2.6)}}
+
+/* ===== Viñeta del piloto (mensajes cortos) ===== */
+.vineta-caja{overflow:visible;pointer-events:none}
+.vineta{height:100%;display:flex;align-items:flex-end;justify-content:flex-start;pointer-events:none}
+.vineta p{position:relative;margin:0 0 22px;max-width:100%;padding:10px 18px 11px;background:#fff;color:var(--azul-oscuro);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente);font-weight:800;font-size:24px;line-height:1.2;opacity:0;transform:scale(.4);transform-origin:43px 100%}
+.vineta p:empty{display:none}
+.vineta p .resto{visibility:hidden}
+.vineta p .avanza{display:inline-block;vertical-align:middle;margin-left:10px;border-style:solid;border-width:10px 8px 0 8px;border-color:var(--azul) transparent transparent transparent;animation:flecha .7s ease-in-out infinite alternate}
+@keyframes flecha{to{transform:translateY(4px)}}
+.vineta p::before,.vineta p::after{content:'';position:absolute;border-style:solid;border-color:transparent}
+.vineta p::before{left:30px;bottom:-26px;border-width:24px 13px 0 13px;border-top-color:var(--azul-oscuro)}
+.vineta p::after{left:32px;bottom:-19px;border-width:20px 11px 0 11px;border-top-color:#fff}
+.vineta p.visible{animation:pop .38s cubic-bezier(.2,1.4,.4,1) forwards}
+.vineta p.saliendo{animation:despop .24s ease forwards}
+.vineta p.eroare{color:var(--coral-oscuro)}
+.vineta p.succes{color:var(--azul)}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+@keyframes despop{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.6)}}
+
+/* ===== Paneles (cuadros de diálogo) ===== */
+.panel{position:absolute;left:50%;top:clamp(66px,10vh,108px);transform:translateX(-50%);z-index:10;width:min(540px,90vw);font-size:clamp(15.5px,1.15vw,19px);background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 20px 36px rgba(6,17,58,.28);padding:20px 26px;transition:opacity .7s ease,transform .7s ease}
+.panel.fuera{opacity:0;transform:translateX(-50%) translateY(-24px);pointer-events:none}
+.panel h1{margin:0 0 8px;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(26px,2.5vw,36px);line-height:1.02;color:var(--azul)}
+.panel p{margin:0 0 .6em}
+.panel p:last-child{margin-bottom:0}
+
+/* Acceso: solo la entrada de la palabra (sin tarjeta de texto). Aparece al acabar el diálogo. */
+.acceso{position:absolute;left:50%;top:clamp(104px,17vh,160px);transform:translateX(-50%);z-index:10;width:min(540px,90vw);display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .7s ease,transform .7s ease}
+.acceso.entra{animation:apareceAcceso .6s ease backwards}
+@keyframes apareceAcceso{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%)}}
+.acceso.fuera{opacity:0;transform:translateX(-50%) translateY(-24px);pointer-events:none}
+#n0-formular{width:100%;display:flex;gap:10px;margin:0;padding:10px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:16px;box-shadow:0 5px 0 var(--azul-oscuro),0 18px 30px rgba(6,17,58,.25)}
+
+/* Aviso de que se avanza con un clic en cualquier parte */
+.pista-clic{position:fixed;left:50%;top:clamp(66px,9vh,86px);transform:translateX(-50%);z-index:12;margin:0;padding:4px 18px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-weight:800;font-size:.95em;color:var(--azul-oscuro);pointer-events:none;animation:latido 1.6s ease-in-out infinite}
+@keyframes latido{50%{transform:translateX(-50%) scale(1.05)}}
+#n0-cuvant{flex:1 1 170px;min-width:0;font:inherit;font-size:1.05em;font-weight:700;color:var(--azul-oscuro);background:#fff;border:3px solid var(--azul-oscuro);border-radius:12px;padding:8px 14px}
+#n0-cuvant::placeholder{color:#8b93b8;font-weight:600}
+.boton{font-family:var(--fuente-titulo);font-weight:800;font-size:1em;color:var(--azul-oscuro);background:var(--amarillo);border:3px solid var(--azul-oscuro);border-radius:12px;padding:7px 18px;cursor:pointer;box-shadow:0 4px 0 var(--azul-oscuro);transition:transform .08s,box-shadow .08s}
+.boton:hover{transform:translateY(-1px)}
+.boton:active{transform:translateY(4px);box-shadow:0 1px 0 var(--azul-oscuro)}
+.enlace{flex:0 0 auto;font-family:var(--fuente-titulo);font-weight:800;font-size:1em;color:var(--azul-oscuro);background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;padding:5px 20px;cursor:pointer;box-shadow:0 4px 0 var(--azul-oscuro);transition:transform .08s,box-shadow .08s}
+.enlace:hover{transform:translateY(-1px)}
+.enlace:active{transform:translateY(3px);box-shadow:0 1px 0 var(--azul-oscuro)}
+.enlace:focus-visible{outline:3px solid var(--amarillo);outline-offset:1px}
+.enlace.pulsa{animation:pulsa 1.2s ease-in-out infinite}
+@keyframes pulsa{50%{background:var(--amarillo)}}
+.boton[disabled]{opacity:.5;cursor:default}
+
+.mesaj{min-height:1.4em;margin:0!important;font-weight:700}
+.mesaj.eroare{color:var(--coral-oscuro)}
+.mesaj.succes{color:var(--azul)}
+/* Pistas: notas amarillas a la derecha del panel, para no tapar nunca el coche */
+.notas{position:absolute;inset:0;z-index:9;pointer-events:none;transition:opacity .6s ease}
+.notas.fuera{opacity:0}
+.lista-indicii{margin:0;padding:0;list-style:none}
+.lista-indicii li{position:absolute;background:var(--amarillo);color:var(--azul-oscuro);border:3px solid var(--azul-oscuro);border-radius:6px 16px 8px 16px;padding:10px 14px;box-shadow:0 5px 0 var(--azul-oscuro);font-weight:700;font-size:.92em;line-height:1.35;transform-origin:top left;animation:cae .6s cubic-bezier(.2,1.3,.4,1) both}
+/* Cada nota va a un sitio distinto de la pantalla: nunca encima de la entrada ni de la viñeta del piloto */
+.lista-indicii li:nth-child(1){--nota:-2deg;left:3vw;top:clamp(120px,20vh,180px);width:min(300px,calc(50vw - 270px - 3vw - 14px))}
+.lista-indicii li:nth-child(2){--nota:1.6deg;right:3vw;top:clamp(130px,22vh,190px);width:min(300px,calc(50vw - 270px - 3vw - 14px))}
+.lista-indicii li:nth-child(3){--nota:-1deg;left:5vw;top:clamp(300px,52vh,420px);width:min(300px,28vw)}
+.lista-indicii b{color:var(--azul);font-family:var(--fuente-titulo)}
+@keyframes cae{from{opacity:0;transform:translateY(-20px) rotate(calc(var(--nota,0deg) - 7deg))}to{opacity:1;transform:rotate(var(--nota,0deg))}}
+@media (max-width:900px){
+  /* En ventanas estrechas las notas se apilan abajo en lugar de repartirse */
+  .notas{inset:auto;left:50%;bottom:12px;transform:translateX(-50%);width:min(520px,92vw)}
+  .lista-indicii li:nth-child(n){position:static;width:auto;margin:0 0 12px}
+}
+
+/* Panel del versículo + primera flor */
+.panel-versiculo{display:flex;align-items:center;gap:20px;animation:apareceFicha .8s ease backwards}
+@keyframes apareceFicha{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%)}}
+.flor-grande{flex:0 0 auto;width:clamp(80px,8vw,108px);height:auto;overflow:visible}
+.texto-versiculo{flex:1;min-width:0}
+.etiqueta{margin:0 0 6px!important;font-family:var(--fuente-titulo);font-weight:800;font-size:.95em;letter-spacing:.05em;text-transform:uppercase;color:var(--coral-oscuro)}
+blockquote{margin:0 0 12px;font-size:1.06em;font-weight:600}
+blockquote p{margin:0 0 6px!important}
+blockquote footer{font-family:var(--fuente-titulo);font-weight:800;color:var(--azul)}
+.cabeza-anim{transform-box:fill-box;transform-origin:center;transform:scale(0)}
+.tallo{stroke-dasharray:140;stroke-dashoffset:140}
+.hoja{transform-box:fill-box;transform-origin:center bottom;transform:scale(0)}
+.panel-versiculo.florece .tallo{animation:crece .9s ease-out .1s forwards}
+.panel-versiculo.florece .hoja{animation:brotahoja .6s ease-out .7s forwards}
+.panel-versiculo.florece .cabeza-anim{animation:florece 1.1s cubic-bezier(.2,1.4,.4,1) .9s forwards}
+@keyframes crece{to{stroke-dashoffset:0}}
+@keyframes brotahoja{to{transform:scale(1)}}
+@keyframes florece{from{transform:scale(0) rotate(-50deg)}to{transform:scale(1.15) rotate(0)}}
+
+/* Grano sobre la escena ya va dentro del SVG; aquí, ajustes para pantallas pequeñas */
+@media (max-width:720px){
+  .panel{padding:20px 18px}
+  .panel-versiculo{flex-direction:column;text-align:center}
+  .hud{padding:10px 12px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
