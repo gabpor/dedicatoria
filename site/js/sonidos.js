@@ -149,5 +149,35 @@
     motor(t, [[0, 88], [0.6, 124], [1.7, 176]], 0.06, 0.25, 0.7, 1.9);
   }
 
-  window.Sonidos = { intentar: intentar, arrancar: arrancar, alejarse: alejarse };
+  /* Una nota limpia y redonda (campanita suave). */
+  function nota(t, frecuencia, duracion, vol) {
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(frecuencia, t);
+    osc.connect(g);
+    g.connect(maestro);
+    envolvente(g, t, vol, 0.03, duracion);
+    osc.start(t);
+    osc.stop(t + duracion + 0.05);
+  }
+
+  /* Respuesta correcta: tres notas ascendentes, muy suaves. */
+  function acierto() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    nota(t, 523.25, 0.55, 0.1);
+    nota(t + 0.12, 659.25, 0.6, 0.1);
+    nota(t + 0.24, 783.99, 0.85, 0.08);
+  }
+
+  /* Llegada: el coche frena despacio y se detiene. */
+  function llegar() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    motor(t, [[0, 168], [0.9, 130], [2, 92]], 0.06, 0.15, 1.7, 2.7);
+    soplo(t + 2.3, 0.05, 260, 0.35);
+  }
+
+  window.Sonidos = { intentar: intentar, arrancar: arrancar, alejarse: alejarse, acierto: acierto, llegar: llegar };
 })();

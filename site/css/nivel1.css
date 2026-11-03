@@ -1,0 +1,27 @@
+/* ===== Nivel 1 · Valencia =====
+   Reutiliza la escena, la viñeta del piloto y los paneles de estilos.css; aquí solo lo propio del nivel. */
+
+/* El coche llega desde la izquierda y se detiene; al marcharse sale por la derecha. */
+.escena-valencia .coche-sale{transform:translateX(-1000px)}
+.escena-valencia.aparca .coche-sale{transform:translateX(0);transition:transform 2.6s cubic-bezier(.12,.62,.28,1)}
+.escena-valencia.aparca.sale .coche-sale{transform:translateX(1150px);transition:transform 1.7s cubic-bezier(.5,0,.9,.5)}
+
+.olas{animation:olas 8s ease-in-out infinite alternate}
+@keyframes olas{to{transform:translateX(26px)}}
+.barca{transform-box:fill-box;transform-origin:center bottom;animation:boya 4.5s ease-in-out infinite alternate}
+@keyframes boya{from{transform:translateY(0) rotate(-1.5deg)}to{transform:translateY(-3px) rotate(1.5deg)}}
+
+/* ===== Las 36 preguntas: una tarjeta, tres tramos de progreso (uno por set) ===== */
+.quiz{width:min(600px,92vw);animation:apareceFicha .7s ease backwards}
+.quiz-progreso{display:flex;gap:8px;margin-bottom:12px}
+.quiz-progreso span{flex:1;height:14px;border:3px solid var(--azul-oscuro);border-radius:99px;background:#fff;overflow:hidden}
+.quiz-progreso i{display:block;width:0;height:100%;background:var(--azul);transition:width .4s ease,background .3s ease}
+.quiz-progreso i.actual{background:var(--amarillo)}
+
+.quiz-pregunta{margin:0;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(21px,1.85vw,28px);line-height:1.18;color:var(--azul)}
+.quiz-pregunta.larga{font-size:clamp(18px,1.5vw,23px);line-height:1.25}
+.quiz.nueva .quiz-pregunta{animation:sube .4s ease both}
+@keyframes sube{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.quiz-pie{display:flex;align-items:center;gap:12px;margin-top:18px}
+.quiz-pie .boton{margin-left:auto}

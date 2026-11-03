@@ -8,6 +8,7 @@
   <title>Pentru tine</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cg fill='%23facc15'%3E%3Ccircle cx='-17' cy='-17' r='27'/%3E%3Ccircle cx='17' cy='-17' r='27'/%3E%3Ccircle cx='17' cy='17' r='27'/%3E%3Ccircle cx='-17' cy='17' r='27'/%3E%3C/g%3E%3Ccircle r='12' fill='%230c1f5c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/estilos.css">
+  <link rel="stylesheet" href="css/nivel1.css">
 </head>
 <body>
 
@@ -241,6 +242,171 @@
     </div>
   </section>
 
+  <!-- NIVEL 1 · Valencia -->
+  <section class="nivel" id="nivel-1" aria-labelledby="n1-titlu">
+
+    <svg class="escena escena-valencia" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="n1-mar" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#86aef5"/>
+          <stop offset="1" stop-color="#2f63e6"/>
+        </linearGradient>
+
+        <!-- Palmera: tronco con anillos y seis hojas (tres y su reflejo) -->
+        <g id="n1-palmera">
+          <path d="M0 0C8 -60 -6 -120 6 -196" fill="none" stroke="#d49a5a" stroke-width="13" stroke-linecap="round"/>
+          <path d="M0 0C8 -60 -6 -120 6 -196" fill="none" stroke="#fff4d6" stroke-width="13" stroke-dasharray="2 14" opacity=".45"/>
+          <g transform="translate(6 -196)">
+            <g fill="#2b6f62">
+              <path transform="rotate(-62)" d="M0 0C24 -42 80 -40 112 16C76 -8 36 -10 0 0Z"/>
+              <path transform="scale(-1 1) rotate(-62)" d="M0 0C24 -42 80 -40 112 16C76 -8 36 -10 0 0Z"/>
+            </g>
+            <g fill="#5aa88a">
+              <path transform="rotate(-30)" d="M0 0C24 -42 80 -40 112 16C76 -8 36 -10 0 0Z"/>
+              <path transform="scale(-1 1) rotate(-30)" d="M0 0C24 -42 80 -40 112 16C76 -8 36 -10 0 0Z"/>
+              <path transform="rotate(4)" d="M0 0C24 -42 80 -40 112 16C76 -8 36 -10 0 0Z"/>
+              <path transform="scale(-1 1) rotate(4)" d="M0 0C24 -42 80 -40 112 16C76 -8 36 -10 0 0Z"/>
+            </g>
+            <circle cx="-5" cy="9" r="7" fill="#d4772a"/><circle cx="8" cy="11" r="7" fill="#f5a04a"/>
+          </g>
+        </g>
+
+        <!-- Naranjo con naranjas (Valencia) -->
+        <g id="n1-naranjo">
+          <rect x="-6" y="-34" width="12" height="38" rx="4" fill="#d49a5a"/>
+          <circle cy="-76" r="48" fill="#5aa88a"/>
+          <ellipse cx="16" cy="-60" rx="34" ry="30" fill="#2b6f62" opacity=".25"/>
+          <g fill="#f5a04a" stroke="#d4772a" stroke-width="1.5">
+            <circle cx="-24" cy="-92" r="7.5"/><circle cx="8" cy="-108" r="7.5"/><circle cx="28" cy="-80" r="7.5"/>
+            <circle cx="-8" cy="-72" r="7.5"/><circle cx="-32" cy="-62" r="7.5"/><circle cx="22" cy="-54" r="7.5"/>
+          </g>
+        </g>
+      </defs>
+
+      <rect width="1280" height="720" fill="url(#cielo)"/>
+
+      <g>
+        <circle cx="1000" cy="168" r="86" fill="#fff4d6" opacity=".26"/>
+        <circle cx="1000" cy="168" r="52" fill="#ffe9a8"/>
+      </g>
+      <g transform="translate(90 90) scale(1.8)"><use class="nube" href="#nube"/></g>
+      <g transform="translate(600 40) scale(1.4)"><use class="nube b" href="#nube"/></g>
+      <g transform="translate(880 270) scale(.9)" opacity=".9"><use class="nube" href="#nube"/></g>
+
+      <!-- Mar -->
+      <rect y="446" width="1280" height="90" fill="url(#n1-mar)"/>
+      <path d="M980 456h60M994 468h32M972 480h76M990 494h40" stroke="#fff4d6" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+      <g class="olas" fill="none" stroke="#fff4d6" stroke-width="3" stroke-linecap="round" opacity=".5">
+        <path d="M600 470q10-7 20 0t20 0M760 486q10-7 20 0t20 0M860 462q10-7 20 0t20 0"/>
+        <path d="M1090 474q10-7 20 0t20 0M690 502q10-7 20 0t20 0M900 508q10-7 20 0t20 0M1160 500q10-7 20 0t20 0"/>
+      </g>
+      <g transform="translate(700 450)"><g class="barca">
+        <path d="M0 0H70L58 14H12Z" fill="#ef7a63"/>
+        <path d="M34 -2V-56L8 -2Z" fill="#fff4d6"/>
+        <path d="M40 -2V-42L64 -2Z" fill="#facc15"/>
+      </g></g>
+
+      <!-- Costa: arena que sube hasta la ciudad -->
+      <path d="M0 446H500C540 446 572 484 652 526C860 518 1080 532 1280 524V566H0Z" fill="#f7d7b9"/>
+      <path d="M520 450C552 462 584 492 652 526C860 518 1080 532 1280 524" fill="none" stroke="#fff4d6" stroke-width="3" opacity=".7"/>
+
+      <!-- Ciudad: casas de colores y el Micalet -->
+      <g>
+        <rect x="0" y="392" width="84" height="58" fill="#f4a3b5"/>
+        <rect x="84" y="360" width="90" height="90" fill="#fff4d6"/>
+        <rect x="236" y="380" width="84" height="70" fill="#a99be8"/>
+        <rect x="320" y="350" width="76" height="100" fill="#fff4d6"/>
+        <rect x="396" y="394" width="70" height="56" fill="#5fc4b0"/>
+        <rect x="466" y="420" width="46" height="30" fill="#f4a3b5"/>
+        <path d="M0 392H84M84 360H174M236 380H320M320 350H396M396 394H466M466 420H512" stroke="#ef7a63" stroke-width="6"/>
+        <path d="M12 410H72M12 430H72M96 378H162M96 398H162M96 418H162M248 398H308M248 418H308M332 368H386M332 388H386M332 408H386M332 428H386M408 412H458M408 430H458" stroke="#0c1f5c" stroke-width="9" stroke-dasharray="9 13" opacity=".7"/>
+        <!-- Micalet -->
+        <rect x="180" y="296" width="56" height="154" fill="#fff4d6"/>
+        <rect x="212" y="296" width="24" height="154" fill="#f0dcb4"/>
+        <path d="M174 298Q208 240 242 298Z" fill="#ef7a63"/>
+        <path d="M208 252V232" stroke="#0c1f5c" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="208" cy="229" r="5" fill="#facc15"/>
+        <path d="M198 336V322a10 10 0 0 1 20 0V336Z M198 396V386a10 10 0 0 1 20 0V396Z" fill="#0c1f5c"/>
+        <path d="M180 352H236M180 414H236" stroke="#e0c79a" stroke-width="4"/>
+      </g>
+
+      <use href="#n1-palmera" transform="translate(96 566) scale(1.15)"/>
+      <use href="#n1-palmera" transform="translate(1214 566) scale(-1.25 1.25)"/>
+      <use href="#n1-naranjo" transform="translate(900 566) scale(1.1)"/>
+
+      <!-- Cartel del km 0 -->
+      <g transform="translate(1068 0)">
+        <rect x="-5" y="498" width="10" height="64" fill="#0c1f5c"/>
+        <rect x="-70" y="446" width="140" height="58" rx="9" fill="#06113a" opacity=".25" transform="translate(4 5)"/>
+        <rect x="-70" y="446" width="140" height="58" rx="9" fill="#fff4d6" stroke="#0c1f5c" stroke-width="4"/>
+        <text x="0" y="478" text-anchor="middle" font-family="Baloo 2, Nunito, sans-serif" font-weight="800" font-size="26" fill="#0c1f5c">Valencia</text>
+        <text x="0" y="497" text-anchor="middle" font-family="Baloo 2, Nunito, sans-serif" font-weight="800" font-size="16" fill="#b8432f">km 0</text>
+      </g>
+
+      <!-- Carretera -->
+      <rect y="556" width="1280" height="96" fill="#0c1f5c"/>
+      <path d="M0 560H1280" stroke="#fff4d6" stroke-width="3" opacity=".5"/>
+      <path d="M0 606H1280" stroke="#fff4d6" stroke-width="5" stroke-dasharray="40 30" opacity=".9"/>
+
+      <use href="#campo-tile"/>
+
+      <!-- Coche: llega desde la izquierda y se detiene -->
+      <g class="coche-sale">
+      <ellipse cx="560" cy="636" rx="290" ry="9" fill="#06113a" opacity=".5"/>
+      <g class="coche-tose"><g class="coche-rebota">
+        <use href="#coche" x="320" y="471.5" width="480" height="172.5"/>
+        <g class="humo" fill="#fff4d6">
+          <circle class="puf puf1" cx="352" cy="592" r="9"/>
+          <circle class="puf puf2" cx="352" cy="592" r="9"/>
+          <circle class="puf puf3" cx="352" cy="592" r="9"/>
+        </g>
+      </g></g>
+
+      <foreignObject class="vineta-caja" x="528" y="372" width="560" height="150">
+        <div xmlns="http://www.w3.org/1999/xhtml" class="vineta" aria-hidden="true"><p id="n1-vineta-texto"></p></div>
+      </foreignObject>
+      </g>
+
+      <rect width="1280" height="720" filter="url(#grano)" opacity=".5" style="pointer-events:none"/>
+    </svg>
+
+    <h1 class="sr-only" id="n1-titlu">Valencia</h1>
+
+    <p class="pista-clic" id="n1-pista-clic" hidden>Apasă oriunde pentru a continua</p>
+    <p class="mesaj sr-only" id="n1-mesaj" role="status" aria-live="polite"></p>
+
+    <!-- Las 36 preguntas de Aron: aparece cuando el piloto termina de hablar -->
+    <div class="panel quiz" id="n1-quiz" hidden>
+      <div class="quiz-progreso" id="n1-progreso" role="img" aria-label="Întrebarea 1 din 36">
+        <span><i></i></span><span><i></i></span><span><i></i></span>
+      </div>
+      <p class="etiqueta" id="n1-tipo"></p>
+      <h2 class="quiz-pregunta" id="n1-pregunta" aria-live="polite"></h2>
+      <div class="quiz-pie">
+        <button class="enlace" id="n1-atras" type="button" hidden>Înapoi</button>
+        <button class="boton" id="n1-siguiente" type="button">Mai departe</button>
+      </div>
+    </div>
+
+    <!-- Recompensa: versículo y segunda flor -->
+    <div class="panel panel-versiculo" id="n1-versiculo" hidden>
+      <svg class="flor-grande" viewBox="0 0 140 200" aria-hidden="true">
+        <path class="tallo" d="M70 200C68 160 72 126 70 96" fill="none" stroke="#2b6f62" stroke-width="5" stroke-linecap="round"/>
+        <path class="hoja" d="M70 160C40 154 22 130 26 110C52 116 68 136 70 160Z" fill="#5aa88a"/>
+        <path class="hoja" d="M70 140C98 134 116 112 112 94C88 100 72 118 70 140Z" fill="#5aa88a"/>
+        <g transform="translate(70 70)"><g class="cabeza-anim"><use href="#cabeza" style="--petalo:#ef7a63;--sombra:#c4503f;--centro:#facc15"/></g></g>
+      </svg>
+      <div class="texto-versiculo">
+        <p class="etiqueta">A doua floare a drumului</p>
+        <blockquote>
+          <p>Astfel, Iacov a slujit șapte ani pentru Rahela; și anii aceștia i s-au părut ca vreo câteva zile, pentru că o iubea.</p>
+          <footer>Geneza 29:20</footer>
+        </blockquote>
+        <button class="boton" id="n1-continua" type="button">Mai departe</button>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- Radio del coche (reproductor de YouTube). Se muestra sola si el navegador bloquea el sonido o falla -->
@@ -259,5 +425,6 @@
 <script src="js/dialogo.js"></script>
 <script src="js/main.js"></script>
 <script src="js/niveles/nivel0.js"></script>
+<script src="js/niveles/nivel1.js"></script>
 </body>
 </html>

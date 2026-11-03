@@ -113,5 +113,33 @@
     return { cancelar: parar };
   }
 
-  window.Dialogo = { reproducir: reproducir };
+  /* Mensajes sueltos del piloto (reacciones): una viñeta que se muestra y, si se indica, se esconde sola.
+     elemento: el <p> de la viñeta. lector: elemento sr-only que repite el texto para lectores de pantalla.
+     decir(texto, tipo, ms): tipo es una clase CSS extra (eroare, succes); ms, el tiempo visible (0 = se queda). */
+  function hablante(elemento, lector) {
+    var relojVineta = null;
+    var relojSalida = null;
+
+    function callar() {
+      clearTimeout(relojVineta);
+      clearTimeout(relojSalida);
+      elemento.classList.add('saliendo');
+      relojSalida = setTimeout(function () { elemento.classList.remove('visible', 'saliendo'); }, 240);
+    }
+
+    function decir(texto, tipo, ms) {
+      clearTimeout(relojVineta);
+      clearTimeout(relojSalida);
+      if (lector) { lector.textContent = texto; }
+      elemento.textContent = texto;
+      elemento.className = tipo || '';
+      void elemento.getBoundingClientRect();
+      elemento.classList.add('visible');
+      if (ms) { relojVineta = setTimeout(callar, ms); }
+    }
+
+    return { decir: decir, callar: callar };
+  }
+
+  window.Dialogo = { reproducir: reproducir, hablante: hablante };
 })();
