@@ -13,3 +13,22 @@ inspiraciones/
 
 # Pruebas de estilo locales: no se publican hasta aprobarlas
 pruebas/
+
+# Historias de Instagram (fondos animados y textos de la invitación): locales, nunca al repositorio
+historias/
+
+# Contenido privado de la pareja y secretos: nunca al repositorio
+datos-privados/
+.env
+.env.*
+*.pem
+
+# Python genera estos archivos con rutas de mi equipo
+__pycache__/
+*.pyc
+
+# Fotos y audio privados: viven en el almacén privado de Supabase, no en el repositorio
+site/assets/img/
+site/assets/audio/*.mp3
+site/assets/audio/*.m4a
+site/assets/audio/*.mp4

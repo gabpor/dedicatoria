@@ -121,6 +121,7 @@
       width: 356,
       height: 200,
       videoId: ID_VIDEO,
+      host: 'https://www.youtube-nocookie.com',
       playerVars: {
         autoplay: 0, controls: 1, disablekb: 1, fs: 0, iv_load_policy: 3,
         modestbranding: 1, playsinline: 1, rel: 0, loop: 1, playlist: ID_VIDEO

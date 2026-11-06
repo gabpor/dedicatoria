@@ -15,6 +15,30 @@
     return !!(nodo && nodo.closest && nodo.closest('button, input, textarea, a, label, .radio-panel'));
   }
 
+  /* Sincronización en pareja: cada diálogo tiene una clave (nivel + orden dentro del nivel) igual en las dos
+     pantallas. Quien avanza una línea avisa ("dlg:avanza") y la otra persona salta a esa misma línea. */
+  var ultimoNivel = -2;
+  var contador = 0;
+  var sesiones = {};
+  var pendientes = {};
+  var escuchando = false;
+
+  function claveSesion() {
+    var n = window.Juego && typeof window.Juego.nivel === 'function' ? window.Juego.nivel() : -1;
+    if (n !== ultimoNivel) { ultimoNivel = n; contador = 0; }
+    contador += 1;
+    return n + ':' + contador;
+  }
+
+  function escucharPareja() {
+    if (escuchando || !window.Sala) { return; }
+    escuchando = true;
+    window.Sala.alRecibir('dlg:avanza', function (d) {
+      if (!d || typeof d.k !== 'string') { return; }
+      if (sesiones[d.k]) { sesiones[d.k](d); } else { pendientes[d.k] = d; } /* aún no ha llegado a ese diálogo */
+    });
+  }
+
   /* elemento: el <p> de la viñeta. lineas: lista de textos.
      opciones: { lector: elemento que recibe cada línea completa para lectores de pantalla,
                  clase: clase CSS extra de la viñeta, alTerminar: función } */
@@ -28,6 +52,8 @@
     var cuantas = 0;
     var escrito = null;
     var resto = null;
+    var clave = claveSesion();
+    escucharPareja();
 
     function ultima() { return indice >= lineas.length - 1; }
 
@@ -53,6 +79,7 @@
     }
 
     function mostrarLinea(i) {
+      clearInterval(reloj);
       indice = i;
       texto = lineas[i];
       cuantas = 0;
@@ -86,29 +113,48 @@
       if (!ultima()) { mostrarLinea(indice + 1); }
     }
 
+    /* Avance hecho por esta persona: se aplica y se avisa a la otra. */
+    function avanzarYAvisar() {
+      if (!activo) { return; }
+      avanzar();
+      if (window.Sala && window.Sala.hayCompanero()) {
+        window.Sala.emitir('dlg:avanza', { k: clave, i: indice, listo: !escribiendo });
+      }
+    }
+
+    /* Avance hecho por la otra persona: nos ponemos en su misma línea. */
+    function aplicarRemoto(d) {
+      if (!activo || typeof d.i !== 'number') { return; }
+      if (d.i > indice) { mostrarLinea(Math.min(d.i, lineas.length - 1)); }
+      if (d.listo && escribiendo && d.i === indice) { terminarLinea(); }
+    }
+
     function alClic(evento) {
       if (esControl(evento.target)) { return; }
-      avanzar();
+      avanzarYAvisar();
     }
 
     function alTecla(evento) {
       if (esControl(evento.target)) { return; }
       if (evento.key === 'Enter' || evento.key === ' ' || evento.key === 'ArrowRight') {
         evento.preventDefault();
-        avanzar();
+        avanzarYAvisar();
       }
     }
 
     function parar() {
       activo = false;
       clearInterval(reloj);
+      delete sesiones[clave];
       document.removeEventListener('click', alClic);
       document.removeEventListener('keydown', alTecla);
     }
 
     document.addEventListener('click', alClic);
     document.addEventListener('keydown', alTecla);
+    sesiones[clave] = aplicarRemoto;
     mostrarLinea(0);
+    if (pendientes[clave]) { var previo = pendientes[clave]; delete pendientes[clave]; aplicarRemoto(previo); }
 
     return { cancelar: parar };
   }
@@ -138,7 +184,13 @@
       if (ms) { relojVineta = setTimeout(callar, ms); }
     }
 
-    return { decir: decir, callar: callar };
+    /* Cancela los temporizadores pendientes sin tocar la viñeta (para reiniciar o detener el nivel). */
+    function cancelar() {
+      clearTimeout(relojVineta);
+      clearTimeout(relojSalida);
+    }
+
+    return { decir: decir, callar: callar, cancelar: cancelar };
   }
 
   window.Dialogo = { reproducir: reproducir, hablante: hablante };

@@ -1,0 +1,127 @@
+/* ===== Nivel 3 · Lyon =====
+   Reutiliza la escena, la viñeta del piloto y los paneles de estilos.css, y las olas y la barca de nivel1.css.
+   Lo propio del nivel, todo con prefijo n3-: la llegada del coche, la pregunta con el botón "Nu" que huye (prólogo)
+   y el fotomatón (cabina vintage con cámara real, tira conjunta). */
+
+/* El coche llega desde la izquierda y se detiene; al marcharse sale por la derecha. */
+.escena-lyon .coche-sale{transform:translateX(-1000px)}
+.escena-lyon.aparca .coche-sale{transform:translateX(0);transition:transform 2.6s cubic-bezier(.12,.62,.28,1)}
+.escena-lyon.aparca.sale .coche-sale{transform:translateX(1150px);transition:transform 1.7s cubic-bezier(.5,0,.9,.5)}
+
+/* ===== Prólogo: la pregunta ===== */
+.n3-pregunta{width:min(560px,92vw);text-align:center;animation:apareceFicha .7s ease backwards}
+.n3-pregunta.fuera{pointer-events:none}
+.n3-pregunta-texto{margin:0 0 20px;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(22px,2vw,30px);line-height:1.18;color:var(--azul)}
+.n3-pregunta.nueva .n3-pregunta-texto{animation:n3-sube .45s ease both}
+@keyframes n3-sube{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.n3-pregunta-botones{display:flex;align-items:center;justify-content:center;gap:30px;min-height:64px}
+
+/* "Da" crece un poco cada vez que "Nu" huye (--crece lo pone el JS) */
+.boton.n3-boton-da{font-size:1.2em;padding:8px 32px;transform:scale(var(--crece,1));transition:transform .3s cubic-bezier(.2,1.4,.4,1),box-shadow .08s}
+.boton.n3-boton-da:hover{transform:scale(var(--crece,1)) translateY(-1px)}
+.boton.n3-boton-da:active{transform:scale(var(--crece,1)) translateY(4px);box-shadow:0 1px 0 var(--azul-oscuro)}
+.boton.n3-boton-da.late{animation:n3-late 1.2s ease-in-out infinite}
+@keyframes n3-late{50%{box-shadow:0 4px 0 var(--azul-oscuro),0 0 0 9px rgba(250,204,21,.55)}}
+
+/* "Nu": en su hueco es un botón normal; al huir sale del panel y vuela por la pantalla */
+.n3-hueco-nu{display:inline-block;touch-action:manipulation}
+.n3-boton-nu{touch-action:manipulation}
+.n3-boton-nu.huye{position:absolute;z-index:15;margin:0;transform:rotate(var(--rot,0deg));transition:left .32s cubic-bezier(.2,1.25,.4,1),top .32s cubic-bezier(.2,1.25,.4,1),transform .32s ease}
+.n3-boton-nu.rendido{opacity:0;transform:rotate(var(--rot,0deg)) scale(.2);pointer-events:none;transition:opacity .4s ease,transform .4s ease}
+
+/* ===== Fotomatón: la cabina ===== */
+.n3-cabina{position:absolute;inset:0;z-index:14;overflow:hidden;background:var(--azul-oscuro);opacity:0;transition:opacity .7s ease}
+.n3-cabina.visible{opacity:1}
+.n3-cabina.saliendo{opacity:0;pointer-events:none}
+.n3-fondo{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* Tarjeta crema (la misma que los paneles de estilos.css) */
+.n3-ficha{position:relative;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 20px 36px rgba(6,17,58,.28);padding:16px 20px;font-size:clamp(15px,1.1vw,18px)}
+.n3-ficha p{margin:0 0 .6em}
+.n3-ficha p:last-child{margin-bottom:0}
+.n3-titulo{margin:0 0 8px;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(24px,2.2vw,32px);line-height:1.05;color:var(--azul)}
+.n3-titulo:focus{outline:none}
+.n3-nota{font-size:.92em;font-weight:600;color:#3a4a85}
+
+/* Preparación de la cámara */
+.n3-prep{position:absolute;left:50%;top:clamp(92px,12vh,120px);transform:translateX(-50%);width:min(640px,92vw);animation:apareceFicha .6s ease backwards}
+.n3-estados{margin:10px 0 14px;padding:0;list-style:none;display:grid;gap:6px}
+.n3-estados li{display:flex;align-items:flex-start;gap:10px;font-weight:700;line-height:1.3}
+.n3-punto{flex:0 0 auto;width:14px;height:14px;margin-top:.28em;border-radius:50%;border:3px solid var(--azul-oscuro);background:#c9d3f3}
+.n3-punto.n3-ok{background:var(--menta)}
+.n3-punto.n3-espera{background:var(--amarillo)}
+.n3-punto.n3-sin{background:var(--coral)}
+.n3-botones{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+
+/* Sesión: tres columnas (consigna y controles / cabina / tira) */
+.n3-sesion{position:absolute;inset:0;display:grid;grid-template-columns:minmax(230px,.95fr) minmax(380px,1.7fr) minmax(150px,.7fr);gap:clamp(12px,2vw,34px);align-items:start;padding:92px clamp(14px,3vw,48px) 16px}
+.n3-lado{display:flex;flex-direction:column;gap:12px;margin-top:6px;animation:n3-aparece .6s ease backwards}
+@keyframes n3-aparece{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.n3-piloto{display:flex;align-items:flex-start;gap:12px}
+.n3-piloto-ic{flex:0 0 auto;width:54px;height:54px}
+.n3-consigna{position:relative;flex:1;min-width:0;margin:0!important;padding:10px 14px;background:#fff;border:3px solid var(--azul-oscuro);border-radius:16px;box-shadow:0 4px 0 var(--azul-oscuro);font-weight:800;line-height:1.25;color:var(--azul-oscuro)}
+.n3-consigna::before{content:'';position:absolute;left:-12px;top:18px;border-style:solid;border-width:9px 11px 9px 0;border-color:transparent var(--azul-oscuro) transparent transparent}
+.n3-consigna::after{content:'';position:absolute;left:-7px;top:20px;border-style:solid;border-width:7px 9px 7px 0;border-color:transparent #fff transparent transparent}
+.n3-comple{display:flex;flex-wrap:wrap;gap:8px}
+.n3-comple-titlu{flex:1 0 100%;margin:0!important;font-weight:800;color:var(--coral-oscuro)}
+.n3-comp{font-size:.92em;padding:4px 14px}
+.n3-comp[aria-pressed="true"]{background:var(--amarillo)}
+.n3-comp[disabled]{opacity:.5;cursor:default}
+.n3-lado .boton{align-self:flex-start;font-size:1.08em;padding:8px 24px}
+
+/* La cabina: rótulo LED, cortinas a los lados, ventanilla con la cámara y taburete */
+.n3-centro{display:flex;flex-direction:column;align-items:center;min-width:0;min-height:0}
+.n3-led{min-width:min(100%,300px);text-align:center;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(20px,1.9vw,28px);letter-spacing:.1em;text-transform:uppercase;line-height:1.2;color:var(--amarillo);background:#06113a;border:4px solid var(--azul-oscuro);border-bottom:0;border-radius:14px 14px 0 0;padding:6px 20px;text-shadow:0 0 10px rgba(250,204,21,.6)}
+.n3-caja{position:relative;display:flex;align-items:stretch;width:min(100%,560px);padding:18px 0 22px;background:var(--azul-oscuro);border:5px solid #06113a;border-radius:0 0 16px 16px;box-shadow:inset 0 0 0 4px var(--amarillo),0 14px 30px rgba(6,17,58,.4)}
+.n3-caja::before{content:'';position:absolute;left:0;right:0;top:0;height:10px;background:#06113a}
+.n3-cortina{flex:0 0 11%;margin-top:6px;background:repeating-linear-gradient(90deg,var(--coral) 0 12px,#d9624c 12px 24px);border-radius:0 0 22px 22px;box-shadow:inset 0 -12px 0 rgba(6,17,58,.18)}
+.n3-cortina-izq{margin-left:10px;margin-right:16px}
+.n3-cortina-der{margin-right:10px;margin-left:16px}
+.n3-pantalla{position:relative;flex:1;min-width:0;aspect-ratio:4/3;margin-top:6px;overflow:hidden;background:#06113a;border-radius:6px;box-shadow:0 0 0 6px var(--crema),0 0 0 10px var(--azul-oscuro)}
+.n3-pantalla video,.n3-pantalla canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.n3-pantalla video{object-fit:cover;transform:scaleX(-1);background:#06113a}
+.n3-numero{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(84px,11vw,150px);line-height:1;color:var(--crema);-webkit-text-stroke:7px var(--azul-oscuro);paint-order:stroke fill;pointer-events:none}
+.n3-numero:empty{display:none}
+.n3-numero.tic{animation:n3-tic .7s ease-out both}
+@keyframes n3-tic{from{opacity:0;transform:scale(1.5)}25%{opacity:1}to{opacity:.95;transform:scale(1)}}
+.n3-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.n3-flash.dispara{animation:n3-flash .55s ease-out}
+@keyframes n3-flash{0%{opacity:.92}100%{opacity:0}}
+.n3-taburete{width:clamp(90px,9vw,124px);height:auto;margin-top:2px;overflow:visible}
+
+/* La tira: sale por una ranura; durante la sesión es pequeña, al final ocupa el centro */
+.n3-derecha{display:flex;flex-direction:column;align-items:center;min-width:0;min-height:0}
+.n3-ranura{width:min(100%,230px);height:14px;margin-bottom:-8px;position:relative;z-index:1;background:#06113a;border:3px solid var(--azul-oscuro);border-radius:8px}
+#n3-tira{display:block;width:min(100%,calc((100vh - 170px) * .6237));height:auto;aspect-ratio:706/1132;background:var(--azul);border:3px solid var(--azul-oscuro);border-radius:6px;box-shadow:0 8px 0 var(--azul-oscuro),0 20px 34px rgba(6,17,58,.35)}
+#n3-tira.revela{animation:n3-revela .9s cubic-bezier(.2,1,.4,1) both}
+@keyframes n3-revela{from{opacity:0;transform:translateY(-36px) scale(.96)}to{opacity:1;transform:none}}
+.n3-final{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:14px;max-width:min(100%,300px)}
+.n3-final .etiqueta{margin:0!important}
+.n3-final-texto{margin:0;padding:10px 14px;background:#fff;border:3px solid var(--azul-oscuro);border-radius:16px;box-shadow:0 4px 0 var(--azul-oscuro);font-weight:800;line-height:1.25;color:var(--azul-oscuro)}
+
+/* Fase final: se esconden la cabina y los controles; la tira queda grande, con sus botones al lado */
+.n3-cabina[data-fase="final"] .n3-lado,
+.n3-cabina[data-fase="final"] .n3-centro{display:none}
+/* En el resultado queda un margen inferior (~124 px) para que la banda del logro no tape la leyenda "Lyon" */
+.n3-cabina[data-fase="final"] .n3-sesion{grid-template-columns:1fr;justify-items:center;padding-bottom:124px}
+.n3-cabina[data-fase="final"] .n3-derecha{flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap;gap:clamp(14px,3vw,44px);width:100%}
+.n3-cabina[data-fase="final"] .n3-ranura{display:none}
+.n3-cabina[data-fase="final"] #n3-tira{width:min(94vw,calc((100vh - 220px) * .6237),560px)}
+.n3-cabina[data-fase="final"] .n3-final{margin-top:0}
+
+.n3-cabina .enlace:focus-visible,.n3-cabina .boton:focus-visible{outline:4px solid var(--amarillo);outline-offset:2px}
+.n3-cabina .n3-ficha .enlace:focus-visible,.n3-cabina .n3-ficha .boton:focus-visible{outline-color:var(--azul)}
+
+/* Ventanas estrechas: la tira se queda sin enseñar durante la sesión (se compone igual) y se ve al final */
+@media (max-width:980px){
+  .n3-sesion{grid-template-columns:minmax(220px,1fr) minmax(300px,1.4fr)}
+  .n3-cabina:not([data-fase="final"]) .n3-derecha{display:none}
+}
+
+/* Sin movimiento: el destello brusco se cambia por un velo suave y breve */
+@media (prefers-reduced-motion:reduce){
+  .n3-flash.dispara{animation:n3-flash-suave .6s linear!important}
+  @keyframes n3-flash-suave{0%,100%{opacity:0}25%,75%{opacity:.2}}
+  .n3-numero.tic{animation:none!important;opacity:1}
+  #n3-tira.revela{animation:none!important}
+}

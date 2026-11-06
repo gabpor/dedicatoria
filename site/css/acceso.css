@@ -1,0 +1,27 @@
+/* ===== Acceso, presencia y cursor de la otra persona (prefijos propios: login-, sala-, cursor-pareja) ===== */
+
+.login{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--azul-oscuro);transition:opacity .5s ease}
+.login.saliendo{opacity:0;pointer-events:none}
+.login-panel{width:min(420px,90vw);display:flex;flex-direction:column;gap:6px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 #06113a,0 20px 36px rgba(6,17,58,.4);padding:24px 28px}
+.login-panel h1{margin:0 0 10px;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(26px,2.5vw,34px);line-height:1.05;color:var(--azul)}
+.login-panel label{font-weight:800;font-size:.9em;margin-top:6px}
+.login-panel input{font:inherit;color:var(--azul-oscuro);background:#fff;border:3px solid var(--azul-oscuro);border-radius:10px;padding:8px 12px}
+.login-panel input:focus-visible{outline:3px solid var(--amarillo);outline-offset:2px}
+.login-mensaje{min-height:1.5em;margin:6px 0 4px;font-weight:700;color:var(--coral-oscuro)}
+.login-panel .boton{align-self:flex-start}
+
+/* Quién está conectado */
+.sala-presencia{position:fixed;left:18px;bottom:16px;z-index:40;display:flex;gap:8px;pointer-events:none}
+.sala-chip{display:inline-flex;align-items:center;gap:7px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;padding:2px 12px 2px 8px;font-weight:800;font-size:.8em;box-shadow:0 3px 0 var(--azul-oscuro)}
+.sala-chip i{width:12px;height:12px;border-radius:50%;border:2px solid var(--azul-oscuro);background:var(--azul)}
+.sala-chip.amarillo i{background:var(--amarillo)}
+.sala-chip.verde i{background:#1f6b4a}
+.sala-chip.marino i{background:#1b3a8c}
+
+/* Cursor de la otra persona */
+.cursor-pareja{--c:var(--azul);position:fixed;left:0;top:0;z-index:90;pointer-events:none;color:var(--c);transition:transform .1s linear}
+.cursor-pareja.amarillo{--c:var(--amarillo)}
+.cursor-pareja.verde{--c:#1f6b4a}
+.cursor-pareja.marino{--c:#1b3a8c}
+.cursor-pareja span{position:absolute;left:22px;top:20px;white-space:nowrap;background:var(--c);color:#fff;border:2px solid var(--azul-oscuro);border-radius:8px;padding:0 8px;font-weight:800;font-size:.75em}
+.cursor-pareja.amarillo span{color:var(--azul-oscuro)}

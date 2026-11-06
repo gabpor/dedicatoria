@@ -63,5 +63,20 @@
     return H.map(function (x) { return ('00000000' + x.toString(16)).slice(-8); }).join('');
   }
 
-  window.Utiles = { normalizar: normalizar, sha256: sha256 };
+  /* Generador pseudoaleatorio con semilla (mulberry32). Devuelve una función sin argumentos con el mismo
+     contrato que Math.random (número en [0, 1)): la misma semilla produce siempre la misma secuencia.
+     Si la semilla no es un número finito, devuelve Math.random. */
+  function crearAzar(semilla) {
+    if (typeof semilla !== 'number' || !isFinite(semilla)) { return Math.random; }
+    var estado = Math.floor(semilla) >>> 0;
+    return function () {
+      estado = (estado + 0x6D2B79F5) >>> 0;
+      var t = estado;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  window.Utiles = { normalizar: normalizar, sha256: sha256, crearAzar: crearAzar };
 })();

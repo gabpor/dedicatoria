@@ -41,14 +41,31 @@ body{background:var(--azul-oscuro);color:var(--azul-oscuro);font-family:var(--fu
 .hud-nivel.oculto{opacity:0;transform:translateY(-14px);visibility:hidden}
 .hud-etiqueta{background:var(--coral);color:#fff;font-family:var(--fuente-titulo);font-weight:800;font-size:.85em;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:1px 12px}
 .hud-titulo{font-family:var(--fuente-titulo);font-weight:800;color:var(--azul)}
-/* Flores del camino: siempre las nueve a la vista, apagadas (grises) hasta superar cada nivel */
-.hud-flores{position:absolute;left:50%;top:14px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:3px 12px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);transition:opacity .7s ease,transform .7s cubic-bezier(.2,1.3,.4,1)}
+/* Ramo del camino: un jarrón con nueve huecos en abanico; cada flor ganada se coloca en el suyo (la bicolor, al centro) */
+.hud-flores{position:absolute;left:50%;top:10px;transform:translateX(-50%);width:176px;height:64px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:30px 30px 16px 16px;box-shadow:0 4px 0 var(--azul-oscuro);transition:opacity .7s ease,transform .7s cubic-bezier(.2,1.3,.4,1),scale .18s ease,box-shadow .2s ease,background-color .2s ease}
 .hud-flores.oculto{opacity:0;transform:translateX(-50%) translateY(-14px);visibility:hidden}
-.hud-flor{width:30px;height:30px;overflow:visible;transition:filter .5s ease,opacity .5s ease,transform .5s ease}
-.hud-flor.apagada{filter:grayscale(1);opacity:.42;transform:scale(.78)}
-.hud-flor.encendida{animation:activa .85s cubic-bezier(.2,1.4,.4,1) both}
-.hud-flor.rapida{animation:none}
-@keyframes activa{0%{transform:scale(.78) rotate(0);filter:grayscale(1);opacity:.42}45%{transform:scale(1.5) rotate(-14deg);filter:none;opacity:1}100%{transform:scale(1) rotate(0);filter:none;opacity:1}}
+.hud-flores.ramo-objetivo{scale:1.07;background:#fff9e4;box-shadow:0 4px 0 var(--azul-oscuro),0 0 0 5px var(--amarillo)}
+.ramo-svg{display:block;width:100%;height:100%;overflow:visible}
+.ramo-tallo{fill:none;stroke:var(--tallo);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100}
+.ramo-hueco{fill:rgba(255,255,255,.4);stroke:var(--azul-oscuro);stroke-width:1.4;stroke-dasharray:2.4 2.4;opacity:.4;transition:opacity .3s ease}
+.ramo-cabeza{transform-box:fill-box;transform-origin:center;transform:scale(0)}
+.ramo-slot.encendida .ramo-tallo{animation:ramo-tallo .55s ease-out forwards}
+.ramo-slot.encendida .ramo-cabeza{animation:ramo-florece .85s cubic-bezier(.2,1.2,.4,1) .25s both}
+.ramo-slot.encendida .ramo-hueco{opacity:0}
+.ramo-slot.encendida.rapida .ramo-tallo{animation:none;stroke-dashoffset:0}
+.ramo-slot.encendida.rapida .ramo-cabeza{animation:none;transform:scale(1)}
+@keyframes ramo-tallo{to{stroke-dashoffset:0}}
+@keyframes ramo-florece{0%{transform:scale(0) rotate(-40deg)}60%{transform:scale(1.35) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+
+/* Botón de la guantera (borrador: «Torpedoul»): aparece con la primera flor */
+.hud-guantera{position:absolute;left:calc(50% + 100px);top:12px;pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;min-width:46px;padding:0 8px;background:var(--crema);color:var(--azul);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;font-size:.95em;cursor:pointer;transition:opacity .7s ease,transform .7s cubic-bezier(.2,1.3,.4,1)}
+.hud-guantera svg{width:26px;height:26px}
+.hud-guantera-texto{display:none}
+@media (min-width:1180px){.hud-guantera{padding:0 16px 0 10px}.hud-guantera-texto{display:inline}}
+.hud-guantera.oculto{opacity:0;transform:translateY(-14px);visibility:hidden}
+.hud-guantera:active{transform:translateY(3px);box-shadow:0 1px 0 var(--azul-oscuro)}
+.hud-guantera:focus-visible{outline:4px solid var(--amarillo);outline-offset:2px}
+.hud-guantera-cuenta{position:absolute;right:-6px;top:-9px;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:var(--amarillo);color:var(--azul-oscuro);border:2px solid var(--azul-oscuro);font-size:.8em;line-height:18px;text-align:center}
 .radio-boton{pointer-events:auto;width:46px;height:46px;border-radius:50%;border:3px solid var(--azul-oscuro);background:var(--crema);color:var(--azul);box-shadow:0 4px 0 var(--azul-oscuro);display:grid;place-items:center;cursor:pointer;padding:0}
 .radio-boton svg{width:26px;height:26px}
 .radio-boton .tachado{opacity:0}
@@ -135,7 +152,7 @@ body{background:var(--azul-oscuro);color:var(--azul-oscuro);font-family:var(--fu
 @keyframes despop{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.6)}}
 
 /* ===== Paneles (cuadros de diálogo) ===== */
-.panel{position:absolute;left:50%;top:clamp(66px,10vh,108px);transform:translateX(-50%);z-index:10;width:min(540px,90vw);font-size:clamp(15.5px,1.15vw,19px);background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 20px 36px rgba(6,17,58,.28);padding:20px 26px;transition:opacity .7s ease,transform .7s ease}
+.panel{position:absolute;left:50%;top:clamp(80px,10vh,108px);transform:translateX(-50%);z-index:10;width:min(540px,90vw);font-size:clamp(15.5px,1.15vw,19px);background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 20px 36px rgba(6,17,58,.28);padding:20px 26px;transition:opacity .7s ease,transform .7s ease}
 .panel.fuera{opacity:0;transform:translateX(-50%) translateY(-24px);pointer-events:none}
 .panel h1{margin:0 0 8px;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(26px,2.5vw,36px);line-height:1.02;color:var(--azul)}
 .panel p{margin:0 0 .6em}
@@ -149,7 +166,7 @@ body{background:var(--azul-oscuro);color:var(--azul-oscuro);font-family:var(--fu
 #n0-formular{width:100%;display:flex;gap:10px;margin:0;padding:10px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:16px;box-shadow:0 5px 0 var(--azul-oscuro),0 18px 30px rgba(6,17,58,.25)}
 
 /* Aviso de que se avanza con un clic en cualquier parte */
-.pista-clic{position:fixed;left:50%;top:clamp(66px,9vh,86px);transform:translateX(-50%);z-index:12;margin:0;padding:4px 18px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-weight:800;font-size:.95em;color:var(--azul-oscuro);pointer-events:none;animation:latido 1.6s ease-in-out infinite}
+.pista-clic{position:fixed;left:50%;top:clamp(80px,10vh,94px);transform:translateX(-50%);z-index:12;margin:0;padding:4px 18px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-weight:800;font-size:.95em;color:var(--azul-oscuro);pointer-events:none;animation:latido 1.6s ease-in-out infinite}
 @keyframes latido{50%{transform:translateX(-50%) scale(1.05)}}
 #n0-cuvant{flex:1 1 170px;min-width:0;font:inherit;font-size:1.05em;font-weight:700;color:var(--azul-oscuro);background:#fff;border:3px solid var(--azul-oscuro);border-radius:12px;padding:8px 14px}
 #n0-cuvant::placeholder{color:#8b93b8;font-weight:600}
@@ -209,6 +226,56 @@ blockquote footer{font-family:var(--fuente-titulo);font-weight:800;color:var(--a
   .panel-versiculo{flex-direction:column;text-align:center}
   .hud{padding:10px 12px}
 }
+
+/* ===== Logro: aviso en la banda inferior y flor arrastrable (borrador en rumano; ver logro.js) ===== */
+.logro-capa{position:fixed;inset:0;z-index:55;pointer-events:none}
+.logro-aviso{position:absolute;left:50%;bottom:clamp(14px,4vh,40px);transform:translateX(-50%);width:min(520px,92vw)}
+.logro-cuerpo{min-height:84px;padding:14px 22px 14px 112px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 18px 30px rgba(6,17,58,.28);pointer-events:auto;animation:logro-sube .5s cubic-bezier(.2,1.3,.4,1) backwards}
+.logro-aviso.logro-sale .logro-cuerpo{animation:logro-baja .3s ease forwards}
+.logro-etiqueta{margin:0 0 2px;font-family:var(--fuente-titulo);font-weight:800;font-size:.8em;letter-spacing:.05em;text-transform:uppercase;color:var(--coral-oscuro)}
+.logro-titulo{margin:0;font-family:var(--fuente-titulo);font-weight:800;font-size:1.3em;line-height:1.1;color:var(--azul)}
+.logro-ayuda{margin:6px 0 0;font-weight:700;font-size:.85em;color:var(--azul-oscuro)}
+@keyframes logro-sube{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes logro-baja{to{opacity:0;transform:translateY(18px)}}
+/* La flor: su origen (0,0) es el centro de la cabeza; el transform lo coloca el script */
+.logro-flor{position:fixed;left:-40px;top:-40px;width:80px;height:108px;padding:0;border:0;background:none;cursor:grab;pointer-events:auto;touch-action:none;transform-origin:40px 40px;will-change:transform}
+.logro-flor:focus-visible{outline:4px solid var(--amarillo);outline-offset:4px;border-radius:12px}
+.logro-flor-aire{display:block;width:100%;height:100%;animation:logro-aparece .6s cubic-bezier(.2,1.5,.4,1) backwards,logro-flota 1.6s ease-in-out .6s infinite alternate}
+.logro-flor-svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 0 rgba(12,31,92,.25))}
+.logro-flor.logro-arrastrando{cursor:grabbing}
+.logro-flor.logro-arrastrando .logro-flor-aire{animation:none;scale:1.15}
+.logro-flor.logro-vuelve{transition:transform .32s cubic-bezier(.2,1.4,.4,1)}
+.logro-flor.logro-vuela{transition:transform .65s cubic-bezier(.45,.05,.25,1);pointer-events:none}
+.logro-flor.logro-vuela .logro-flor-aire{animation:none}
+@keyframes logro-aparece{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+@keyframes logro-flota{to{transform:translateY(-6px) rotate(3deg)}}
+
+/* ===== Guantera: panel con las tarjetas guardadas ===== */
+.guantera{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:78px 16px 20px}
+.guantera-fondo{position:absolute;inset:0;background:rgba(6,17,58,.72)}
+.guantera-panel{position:relative;width:min(640px,94vw);max-height:100%;display:flex;flex-direction:column;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 20px 36px rgba(6,17,58,.34);animation:guantera-abre .35s cubic-bezier(.2,1.3,.4,1) backwards}
+.guantera-cabecera{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px 24px}
+.guantera-encabezado{margin:0;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(24px,2.2vw,32px);line-height:1.05;color:var(--azul)}
+.guantera-cerrar{font:inherit;font-weight:800;font-size:1.5em;line-height:1;width:38px;height:38px;border:3px solid var(--azul-oscuro);border-radius:10px;background:#fff;color:var(--azul-oscuro);cursor:pointer;padding:0}
+.guantera-cerrar:focus-visible,.guantera-lista:focus-visible{outline:4px solid var(--amarillo);outline-offset:2px}
+.guantera-lista{list-style:none;margin:0;padding:6px 24px 22px;overflow:auto;display:grid;gap:14px}
+.guantera-vacia{margin:0;padding:10px 0;font-weight:700}
+.guantera-carta{background:#fff;border:3px solid var(--azul-oscuro);border-radius:12px;padding:10px 14px 12px;box-shadow:0 3px 0 var(--azul-oscuro)}
+.guantera-tipo{display:inline-block;margin:0 0 6px;padding:0 10px;background:var(--amarillo);border:2px solid var(--azul-oscuro);border-radius:999px;font-family:var(--fuente-titulo);font-weight:800;font-size:.75em;letter-spacing:.05em;text-transform:uppercase}
+.guantera-nombre{margin:0 0 4px;font-family:var(--fuente-titulo);font-weight:800;font-size:1.1em;line-height:1.15;color:var(--azul)}
+.guantera-texto{margin:0 0 4px;font-weight:600}
+.guantera-ref{margin:0;font-family:var(--fuente-titulo);font-weight:800;color:var(--coral-oscuro)}
+.guantera-foto{display:block;width:100%;max-height:260px;object-fit:cover;margin:0 0 8px;border:2px solid var(--azul-oscuro);border-radius:8px}
+@keyframes guantera-abre{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
+
+/* ===== Juice: pétalos y chispas (viven un instante y se retiran solos) ===== */
+.juice-capa{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden}
+.juice-petalo{position:absolute;left:0;top:0;width:9px;height:13px;border-radius:55% 45% 55% 45% / 60% 60% 40% 40%;will-change:transform,opacity}
+.juice-chispa{position:absolute;left:0;top:0;width:22px;height:22px;background:var(--amarillo);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);will-change:transform,opacity}
+.juice-pulso{animation:juice-pulso .16s ease-out}
+.juice-muelle{animation:juice-muelle .45s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes juice-pulso{0%{scale:1 1}35%{scale:1.18 .84}70%{scale:.94 1.07}100%{scale:1 1}}
+@keyframes juice-muelle{from{opacity:0;scale:.6}60%{scale:1.08}to{opacity:1;scale:1}}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}

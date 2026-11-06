@@ -1,0 +1,68 @@
+    <h1 class="sr-only" id="n5-titlu">Frontiera</h1>
+    <p class="mesaj sr-only" id="n5-mesaj" role="status" aria-live="polite"></p>
+
+    <p class="pista-clic" id="n5-pista-clic" hidden>Apasă oriunde pentru a continua</p>
+
+    <!-- El piloto habla en una viñeta fija arriba a la izquierda -->
+    <div class="n5-vineta" aria-hidden="true"><div class="vineta"><p id="n5-vineta-texto"></p></div></div>
+
+    <!-- Cuántas paradas lleva y las teclas (estas se esconden al empezar a conducir) -->
+    <p class="n5-progreso" id="n5-progreso" hidden>0 din 13</p>
+    <p class="n5-teclas" id="n5-teclas" hidden>
+      <span class="n5-tecla">←</span><span class="n5-tecla">↑</span><span class="n5-tecla">↓</span><span class="n5-tecla">→</span> conduci
+      <span class="n5-sep-teclas"></span>
+      <span class="n5-tecla n5-tecla-ancha">Spațiu</span> deschide
+    </p>
+    <button class="boton n5-auto" id="n5-auto" type="button" hidden>Mergi la următoarea oprire</button>
+
+    <!-- Ficha de la parada: foto (o el dibujo si aún no hay), fecha y frase -->
+    <div class="panel n5-ficha" id="n5-ficha" role="dialog" aria-labelledby="n5-ficha-titulo" hidden>
+      <div class="n5-polaroid" id="n5-polaroid">
+        <div class="n5-foto-img" id="n5-ficha-foto"></div>
+        <span class="n5-ficha-fecha" id="n5-ficha-fecha"></span>
+      </div>
+      <div class="n5-ficha-cuerpo">
+        <h2 class="n5-titulo" id="n5-ficha-titulo"></h2>
+        <p class="n5-ficha-texto" id="n5-ficha-texto"></p>
+        <p class="n5-ficha-pie"><span class="n5-tecla n5-tecla-ancha">Spațiu</span> pentru a continua</p>
+        <button class="boton" id="n5-ficha-cierra" type="button">Mai departe</button>
+      </div>
+    </div>
+
+    <!-- Las cifras del camino, en la frontera: kilómetros y días -->
+    <div class="panel n5-cifras" id="n5-cifras" hidden>
+      <p class="etiqueta">Control la graniță</p>
+      <h2 class="n5-titulo">Cifrele drumului</h2>
+      <div class="n5-contadores">
+        <div class="n5-contador">
+          <div class="n5-odometro" id="n5-km" aria-hidden="true"></div>
+          <p class="n5-unidad">kilometri</p>
+        </div>
+        <div class="n5-contador" id="n5-caja-zile" hidden>
+          <div class="n5-odometro" id="n5-zile" aria-hidden="true"></div>
+          <p class="n5-unidad">zile de când ne cunoaștem</p>
+        </div>
+      </div>
+      <p class="n5-dato" id="n5-dato" hidden></p>
+      <p class="sr-only" id="n5-lectura" role="status" aria-live="polite"></p>
+      <button class="boton" id="n5-cruza" type="button" hidden>Treci granița</button>
+    </div>
+
+    <!-- Recompensa: versículo y sexta flor -->
+    <div class="panel panel-versiculo" id="n5-flor" hidden>
+      <svg class="flor-grande" viewBox="0 0 140 200" aria-hidden="true">
+        <path class="tallo" d="M70 200C68 160 72 126 70 96" fill="none" stroke="#2b6f62" stroke-width="5" stroke-linecap="round"/>
+        <path class="hoja" d="M70 160C40 154 22 130 26 110C52 116 68 136 70 160Z" fill="#5aa88a"/>
+        <path class="hoja" d="M70 140C98 134 116 112 112 94C88 100 72 118 70 140Z" fill="#5aa88a"/>
+        <g transform="translate(70 70)"><g class="cabeza-anim"><use href="#cabeza" style="--petalo:#f5a04a;--sombra:#d4772a;--centro:#0c1f5c"/></g></g>
+      </svg>
+      <div class="texto-versiculo">
+        <p class="etiqueta">A șasea floare a drumului</p>
+        <blockquote>
+          <p>Bucurați-vă în nădejde. Fiți răbdători în necaz. Stăruiți în rugăciune.</p>
+          <footer>Romani 12:12</footer>
+        </blockquote>
+        <button class="boton" id="n5-continua" type="button">Mai departe</button>
+      </div>
+    </div>
+  

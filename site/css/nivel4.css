@@ -1,0 +1,84 @@
+/* ===== Nivel 4 · París =====
+   Reutiliza la escena, la viñeta del piloto y los paneles de estilos.css.
+   Aquí, lo propio del nivel: la llegada del coche, los destellos de la torre y el puzzle de piezas arrastrables. */
+
+/* El coche llega desde la izquierda y se detiene; al marcharse sale por la derecha. */
+.escena-paris .coche-sale{transform:translateX(-1000px)}
+.escena-paris.aparca .coche-sale{transform:translateX(0);transition:transform 2.6s cubic-bezier(.12,.62,.28,1)}
+.escena-paris.aparca.sale .coche-sale{transform:translateX(1150px);transition:transform 1.7s cubic-bezier(.5,0,.9,.5)}
+
+/* Los destellos de la torre */
+.escena-paris .brilla{transform-box:fill-box;transform-origin:center;animation:n4-brilla 2.6s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes n4-brilla{0%,100%{opacity:.25;transform:scale(.55) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(45deg)}}
+
+/* ===== El puzzle =====
+   Un panel casi a pantalla completa: el tablero (un marco vacío) en el centro y las piezas sueltas alrededor.
+   Abajo, una barra con el contador, los comentarios del piloto y los botones. */
+.panel.puzzle{width:min(1760px,98vw);top:78px;padding:10px 14px 8px;animation:apareceFicha .7s ease backwards}
+
+/* La mesa se ajusta a la altura de la ventana sin cambiar su proporción (--razon la pone el JS) */
+.puzzle-escena{position:relative;margin:0 auto;width:min(100%,calc((100vh - 152px) * var(--razon,2.17)));aspect-ratio:var(--razon,2.17)}
+.puzzle-mesa{display:block;width:100%;height:auto;aspect-ratio:var(--razon,2.17);touch-action:none;user-select:none;-webkit-user-select:none}
+.puzzle-mesa .tablero{fill:#fffdf6;stroke:var(--azul-oscuro);stroke-width:4}
+.puzzle-mesa .previa{opacity:0;pointer-events:none;transition:opacity .35s ease}
+.puzzle-mesa.ver .previa{opacity:.94}
+.puzzle-mesa .marco-final{fill:none;stroke:var(--amarillo);stroke-width:7;opacity:0;pointer-events:none;transition:opacity 1.2s ease}
+
+.puzzle-mesa .pieza{cursor:grab;touch-action:none}
+.puzzle-mesa .pieza .contorno{fill:transparent;stroke:var(--crema);stroke-opacity:.9;stroke-width:1.8;stroke-linejoin:round}
+.puzzle-mesa .pieza .borde-sombra{fill:none;stroke:var(--azul-oscuro);stroke-opacity:.32;stroke-width:3.6;stroke-linejoin:round;pointer-events:none}
+.puzzle-mesa .pieza.arrastra{cursor:grabbing;filter:drop-shadow(0 8px 6px rgba(6,17,58,.4))}
+.puzzle-mesa .pieza.encaja{transition:transform .26s cubic-bezier(.2,1.25,.4,1)}
+.puzzle-mesa .pieza.colocada{cursor:default;pointer-events:none}
+.puzzle-mesa .pieza.colocada .contorno{stroke-opacity:.45}
+.puzzle-mesa .pieza.colocada .borde-sombra{stroke-opacity:.16}
+
+/* En pareja: la pieza que alguien tiene en la mano lleva un borde de su color; la de la otra persona está bloqueada
+   y se mueve con una transición corta que suaviza los mensajes de posición (unos 16 por segundo) */
+.puzzle-mesa .pieza.n4-tiene .contorno{stroke-opacity:1;stroke-width:3.4}
+.puzzle-mesa .pieza.n4-azul .contorno{stroke:var(--azul)}
+.puzzle-mesa .pieza.n4-amarillo .contorno{stroke:var(--amarillo)}
+.puzzle-mesa .pieza.n4-ajena{cursor:not-allowed;transition:transform .1s linear;filter:drop-shadow(0 6px 5px rgba(6,17,58,.35))}
+.puzzle-mesa .pieza.n4-ajena.n4-azul{filter:drop-shadow(0 0 4px var(--azul)) drop-shadow(0 6px 5px rgba(6,17,58,.35))}
+.puzzle-mesa .pieza.n4-ajena.n4-amarillo{filter:drop-shadow(0 0 4px var(--amarillo)) drop-shadow(0 6px 5px rgba(6,17,58,.35))}
+
+/* Poza terminată: las juntas se borran y la foto queda enmarcada con un brillo */
+.puzzle-mesa.completa .contorno,.puzzle-mesa.completa .borde-sombra{opacity:0;transition:opacity 1.4s ease}
+.puzzle-mesa.completa .marco-final{opacity:1}
+.puzzle-mesa.completa #n4-colocadas{filter:drop-shadow(0 0 16px rgba(250,204,21,.75))}
+
+/* El reverso: al completar, el cuadro (puesto exactamente sobre el tablero) se da la vuelta y detrás está impreso el versículo.
+   La mesa de debajo se apaga justo cuando el cuadro la sustituye. */
+.puzzle-mesa.n4-oculta-tablero .tablero,.puzzle-mesa.n4-oculta-tablero #n4-colocadas,.puzzle-mesa.n4-oculta-tablero .marco-final{opacity:0;transition:none}
+.n4-cuadro{position:absolute;perspective:1400px;z-index:2;container-type:inline-size}
+.n4-cuadro[hidden]{display:none}
+.n4-cuadro-giro{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 1.3s cubic-bezier(.45,.05,.25,1)}
+.n4-cuadro.n4-vuelto .n4-cuadro-giro{transform:rotateY(180deg) scale(1.1)}
+.n4-cara{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:8px;box-sizing:border-box;overflow:hidden}
+.n4-frente{border:4px solid var(--amarillo);box-shadow:0 0 16px rgba(250,204,21,.75)}
+.n4-frente svg{display:block;width:100%;height:100%}
+.n4-reverso{transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;padding:6%;text-align:center;background:#ead6ad;background-image:repeating-linear-gradient(45deg,rgba(120,84,40,.06) 0 3px,transparent 3px 7px);border:4px solid var(--azul-oscuro);box-shadow:inset 0 0 0 5px #ead6ad,inset 0 0 0 7px rgba(12,31,92,.35),0 8px 18px rgba(6,17,58,.35)}
+.n4-reverso blockquote{margin:0}
+.n4-reverso-texto{margin:0;font-family:var(--fuente-titulo);font-weight:800;font-size:22px;font-size:7.4cqw;line-height:1.3;color:var(--azul-oscuro);opacity:0}
+.n4-reverso-ref{margin-top:.7em;font-weight:800;font-size:15px;font-size:4.6cqw;color:var(--azul);opacity:0}
+.n4-cuadro.n4-impreso .n4-reverso-texto,.n4-cuadro.n4-impreso .n4-reverso-ref{opacity:1;transition:opacity 1.1s ease}
+.n4-cuadro.n4-impreso .n4-reverso-ref{transition-delay:.5s}
+
+/* Barra de abajo: contador, comentarios del piloto (el puzzle tapa la viñeta del coche) y botones */
+.puzzle-pie{display:flex;align-items:center;gap:14px;min-height:46px;margin-top:6px}
+.panel .puzzle-contador{flex:0 0 auto;margin:0;padding:3px 16px;background:var(--amarillo);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;color:var(--azul-oscuro);white-space:nowrap}
+.puzzle-voz{flex:1 1 0;min-width:0;display:flex;justify-content:center}
+.puzzle-botones{flex:0 0 auto;display:flex;align-items:center;gap:12px}
+.puzzle-botones .enlace{padding:4px 18px;white-space:nowrap}
+.puzzle-botones .boton{white-space:nowrap}
+#n4-voz{margin:0;padding:6px 20px 7px;background:#fff;color:var(--azul-oscuro);border:3px solid var(--azul-oscuro);border-radius:16px;box-shadow:0 3px 0 var(--azul-oscuro);font-weight:800;line-height:1.25;text-align:center;opacity:0}
+#n4-voz:empty{display:none}
+#n4-voz.visible{animation:n4-voz-entra .32s cubic-bezier(.2,1.4,.4,1) forwards}
+#n4-voz.saliendo{animation:n4-voz-sale .24s ease forwards}
+#n4-voz.succes{color:var(--azul)}
+@keyframes n4-voz-entra{from{opacity:0;transform:translateY(8px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes n4-voz-sale{from{opacity:1}to{opacity:0;transform:translateY(4px)}}
+
+@media (max-width:720px){
+  .puzzle-pie{flex-wrap:wrap;justify-content:center}
+}

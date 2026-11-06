@@ -1,0 +1,143 @@
+/* ===== Nivel 5 · Frontera =====
+   Un mapa de la frontera hacia Bélgica visto desde arriba: el coche recorre un camino con nueve paradas, de una en
+   una y en orden. Hay dos capas SVG a pantalla completa con el mismo viewBox: .n5-fondo (el terreno, con el grano, que
+   solo se repinta al cambiar el estado de una parada) y .n5-juego (coche, aro, aviso y barrera, que se mueven sin filtro).
+   Todas las clases propias llevan el prefijo n5-, porque todos los CSS de los niveles se cargan a la vez. */
+
+#nivel-5{background:#c5dfa2;overflow:hidden}
+#nivel-5 .oculto{display:none}
+
+/* El mundo: tres capas SVG del mismo tamaño dentro de la cámara, que JS desplaza y escala. El grano de impresión es una
+   capa fija sobre la pantalla (así no se repinta el mundo entero al moverse la cámara). */
+.n5-camara{position:absolute;left:0;top:0;width:3200px;height:1800px;transform-origin:0 0;will-change:transform}
+.n5-mundo,.n5-vida,.n5-juego{position:absolute;left:0;top:0;display:block}
+.n5-vida,.n5-juego{pointer-events:none}
+.n5-grano{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.5;background-size:160px 160px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 .04 0 0 0 0 .12 0 0 0 0 .36 1.6 0 0 0 -.62'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E")}
+
+/* Minimapa: el mundo en pequeño, con el coche y las paradas */
+.n5-minimapa{position:fixed;right:18px;bottom:18px;z-index:12;width:min(240px,22vw);aspect-ratio:16/9;border:3px solid var(--azul-oscuro);border-radius:12px;box-shadow:0 4px 0 var(--azul-oscuro);overflow:hidden;background:#c5dfa2}
+.n5-mini{display:block;width:100%;height:100%}
+.n5-mini-p{stroke:#0c1f5c;stroke-width:22}
+.n5-mini-p.bloq{fill:#b6b9c9}
+.n5-mini-p.sig{fill:#facc15}
+.n5-mini-p.visto{fill:#ef7a63}
+
+/* Pequeñas vidas del campo (todas en la capa .n5-vida, para no repintar el terreno) */
+.n5-aspas{transform-box:fill-box;transform-origin:center;animation:n5-gira linear infinite}
+@keyframes n5-gira{to{transform:rotate(360deg)}}
+.n5-humo{fill:#fff4d6;opacity:0;transform-box:fill-box;transform-origin:center;animation:n5-humea 5s ease-out infinite}
+@keyframes n5-humea{0%{opacity:0;transform:translate(0,0) scale(.6)}15%{opacity:.75}100%{opacity:0;transform:translate(16px,-52px) scale(1.8)}}
+.n5-pajaro{animation:n5-vuela linear infinite}
+@keyframes n5-vuela{from{transform:translate(0,0)}to{transform:translate(1100px,-160px)}}
+.n5-pajaro path{transform-box:fill-box;transform-origin:center;animation:n5-aletea .5s ease-in-out infinite alternate}
+@keyframes n5-aletea{from{transform:scaleY(1)}to{transform:scaleY(.35)}}
+.n5-mariposa{animation:n5-mariposa 12s ease-in-out infinite}
+@keyframes n5-mariposa{0%,100%{transform:translate(0,0)}25%{transform:translate(70px,-34px)}50%{transform:translate(120px,24px)}75%{transform:translate(44px,56px)}}
+.n5-mariposa ellipse{transform-box:fill-box;transform-origin:center;animation:n5-bate .32s ease-in-out infinite alternate}
+@keyframes n5-bate{from{transform:scaleX(1)}to{transform:scaleX(.3)}}
+.n5-pato{animation:n5-flota 4.5s ease-in-out infinite}
+@keyframes n5-flota{0%,100%{transform:translate(0,0)}50%{transform:translate(8px,-2px)}}
+.n5-nube-sombra{fill:#06113a;opacity:.07;animation:n5-nube linear infinite}
+@keyframes n5-nube{from{transform:translateX(0)}to{transform:translateX(3900px)}}
+.n5-pez{transform-box:fill-box;transform-origin:center;opacity:0;animation:n5-salta 8s ease-in-out infinite}
+@keyframes n5-salta{0%,86%{opacity:0;transform:translateY(8px) scale(.4)}90%{opacity:1;transform:translateY(-16px) scale(1) rotate(-22deg)}96%{opacity:1;transform:translateY(0) scale(.9) rotate(30deg)}100%{opacity:0;transform:translateY(6px) scale(.5)}}
+.n5-globo{animation:n5-globo 260s linear infinite}
+@keyframes n5-globo{from{transform:translate(0,0)}to{transform:translate(4300px,-260px)}}
+.n5-tranvia{animation:n5-tranvia 80s linear infinite}
+@keyframes n5-tranvia{from{transform:translateX(0)}to{transform:translateX(4400px)}}
+.n5-paseo{animation:n5-paseo 40s ease-in-out infinite alternate}
+@keyframes n5-paseo{from{transform:translateX(0)}to{transform:translateX(240px)}}
+.n5-nota{opacity:0;animation:n5-nota 4s ease-out infinite}
+@keyframes n5-nota{0%{opacity:0;transform:translate(0,0)}15%{opacity:.85}100%{opacity:0;transform:translate(14px,-48px)}}
+@media (prefers-reduced-motion:reduce){
+  .n5-aspas,.n5-humo,.n5-pajaro,.n5-pajaro path,.n5-mariposa,.n5-mariposa ellipse,.n5-pato,.n5-nube-sombra,.n5-bandera,.n5-pez,.n5-globo,.n5-tranvia,.n5-paseo,.n5-nota{animation:none}
+}
+
+/* Estado de cada parada: bloqueada (gris y con candado), la que toca, vista (con su fecha) o por llegar */
+.n5-edif .n5-cuerpo{transition:filter .6s ease,opacity .6s ease}
+.n5-edif.bloq .n5-cuerpo{filter:grayscale(.92) brightness(.95);opacity:.82}
+.n5-edif.futuro .n5-cuerpo{filter:grayscale(1)}
+.n5-edif .n5-cand,.n5-edif .n5-etiq{opacity:0;transition:opacity .45s ease,transform .45s cubic-bezier(.2,1.3,.4,1)}
+.n5-edif .n5-etiq{transform:translateY(8px)}
+.n5-edif.bloq .n5-cand{opacity:1}
+.n5-edif.visto .n5-etiq{opacity:1;transform:none}
+.n5-edif .n5-niebla{transition:opacity .8s ease}
+.n5-edif.visto .n5-niebla{opacity:0}
+.n5-edif.visto .n5-cuerpo{filter:none;opacity:1}
+.n5-edif.futuro.visto .n5-cuerpo{filter:grayscale(1)}
+.n5-bandera{transform-box:fill-box;transform-origin:left center;animation:n5-ondea 2.6s ease-in-out infinite alternate}
+@keyframes n5-ondea{from{transform:skewY(-3deg) scaleX(1)}to{transform:skewY(3deg) scaleX(.94)}}
+
+/* La parada que toca: un aro en el camino y una flecha que sube y baja sobre el edificio */
+.n5-aro-onda{transform-box:fill-box;transform-origin:center;animation:n5-aro 1.6s ease-out infinite}
+@keyframes n5-aro{0%{transform:scale(.75);opacity:1}100%{transform:scale(1.35);opacity:0}}
+.n5-flecha{animation:n5-bota .9s ease-in-out infinite alternate}
+@keyframes n5-bota{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+#n5-aviso{pointer-events:auto;cursor:pointer;transition:opacity .15s ease}
+
+/* La barrera de la frontera sube al final */
+.n5-brazo{transition:transform 1.5s cubic-bezier(.4,0,.2,1)}
+.n5-juego.abierta .n5-brazo{transform:rotate(90deg)}
+
+/* El cartel de la garita: apagado hasta que sube la barrera; entonces se ilumina y se lee el versículo */
+.n5-cartel-tablero{fill:#3b4d8f;transition:fill 1s ease .2s}
+.n5-cartel-luz{opacity:0;transition:opacity 1.2s ease .2s}
+.n5-cartel-texto{opacity:0;transition:opacity 1.2s ease .6s}
+.n5-juego.abierta .n5-cartel-tablero{fill:#0c1f5c}
+.n5-juego.abierta .n5-cartel-luz{opacity:.55}
+.n5-juego.abierta .n5-cartel-texto{opacity:1}
+
+/* ===== Interfaz sobre el mapa ===== */
+/* El piloto habla en una viñeta fija arriba a la izquierda */
+.n5-vineta{position:fixed;left:22px;top:78px;z-index:12;width:min(540px,62vw);height:150px;pointer-events:none}
+.n5-vineta .vineta{align-items:flex-start}
+.n5-vineta .vineta p{margin:0 0 0;font-size:clamp(17px,1.5vw,22px)}
+.n5-vineta .vineta p::before,.n5-vineta .vineta p::after{display:none}
+
+.n5-progreso{position:fixed;left:22px;bottom:18px;z-index:12;margin:0;padding:2px 16px;background:var(--amarillo);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;color:var(--azul-oscuro);white-space:nowrap}
+.n5-teclas{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:12;margin:0;display:flex;align-items:center;gap:6px;padding:4px 16px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-weight:800;font-size:.95em;color:var(--azul-oscuro);pointer-events:none;transition:opacity .6s ease}
+.n5-teclas.apagada{opacity:0}
+.n5-tecla{display:inline-grid;place-items:center;min-width:1.7em;height:1.7em;padding:0 6px;background:#fff;border:2px solid var(--azul-oscuro);border-radius:7px;box-shadow:0 3px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;line-height:1}
+.n5-tecla-ancha{padding:0 12px;background:var(--amarillo)}
+.n5-sep-teclas{width:12px}
+.n5-auto{position:fixed;right:22px;bottom:150px;z-index:12;animation:n5-sube .5s ease both}
+
+/* Títulos de los paneles de este nivel */
+.panel .n5-titulo{margin:0 0 6px;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(24px,2.2vw,32px);line-height:1.05;color:var(--azul)}
+@keyframes n5-sube{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== Ficha de una parada: polaroid con la foto (o el dibujo), la fecha y la frase ===== */
+.panel.n5-ficha{display:flex;align-items:center;gap:26px;width:min(780px,92vw);top:50%;transform:translate(-50%,-50%);padding:22px 28px;z-index:20;animation:n5-ficha .45s cubic-bezier(.2,1.2,.4,1) backwards}
+@keyframes n5-ficha{from{opacity:0;transform:translate(-50%,-46%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.n5-polaroid{position:relative;flex:0 0 clamp(250px,26vw,340px);padding:10px 10px 8px;background:#fffdf6;border:3px solid var(--azul-oscuro);border-radius:6px;box-shadow:0 6px 0 rgba(6,17,58,.28),0 14px 24px rgba(6,17,58,.28);transform:rotate(-2.5deg)}
+.n5-polaroid::before{content:'';position:absolute;top:-14px;left:50%;width:56px;height:20px;transform:translateX(-50%) rotate(-3deg);background:rgba(250,204,21,.85);border:1px solid rgba(12,31,92,.28)}
+.n5-foto-img{display:grid;place-items:center;width:100%;aspect-ratio:4/3;overflow:hidden;background:#cfe5b8;border:2px solid #e6dcc0;border-radius:3px}
+.n5-polaroid.n5-vertical{flex-basis:clamp(210px,19vw,270px)}
+.n5-polaroid.n5-vertical .n5-foto-img{aspect-ratio:3/4}
+.n5-foto-img svg{display:block;width:78%;height:auto;overflow:visible}
+.n5-foto-img img{display:block;width:100%;height:100%;object-fit:cover}
+.n5-ficha-fecha{display:block;margin-top:8px;font-family:var(--fuente-titulo);font-weight:800;font-size:1.05em;line-height:1.1;text-align:center;color:var(--azul-oscuro)}
+.n5-ficha-cuerpo{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
+.panel .n5-ficha-texto{margin:0;font-weight:700;font-size:1.12em;line-height:1.35}
+.panel .n5-ficha-pie{margin:4px 0 0;display:flex;align-items:center;gap:8px;font-weight:800;font-size:.9em;color:var(--coral-oscuro)}
+
+/* ===== Cifras del camino (kilómetros y días) ===== */
+.panel.n5-cifras{width:min(560px,92vw);text-align:center;animation:apareceFicha .7s ease backwards}
+.n5-contadores{display:flex;justify-content:center;align-items:flex-start;gap:26px;flex-wrap:wrap;margin:12px 0 8px}
+.n5-contador{display:flex;flex-direction:column;align-items:center;gap:6px}
+.n5-odometro{display:inline-flex;align-items:stretch;gap:3px;padding:6px 8px;background:var(--azul-oscuro);border-radius:12px;box-shadow:0 5px 0 #06113a,inset 0 0 0 2px rgba(250,204,21,.28)}
+.n5-odometro .n5-dig{display:grid;place-items:center;min-width:1.02em;padding:1px 3px;background:linear-gradient(#233fa3,#0c1f5c 52%,#233fa3);border-radius:6px;color:var(--amarillo);font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:1.12;font-variant-numeric:tabular-nums}
+.n5-odometro .n5-sep{align-self:flex-end;padding:0 1px 8px;color:var(--amarillo);font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(26px,2.6vw,38px);line-height:1}
+.panel .n5-unidad{margin:0;font-family:var(--fuente-titulo);font-weight:800;font-size:.95em;letter-spacing:.05em;text-transform:uppercase;color:var(--coral-oscuro)}
+.panel .n5-dato{margin:6px 0 12px;font-weight:700;animation:n5-sube .6s ease both}
+.panel.n5-cifras .boton{animation:n5-sube .5s ease both}
+.panel.n5-cifras.fuera{opacity:0;transform:translateX(-50%) translateY(-14px)}
+
+@media (max-width:760px){
+  .panel.n5-ficha{flex-direction:column;gap:18px}
+  .n5-polaroid{flex-basis:auto;width:min(300px,80%)}
+}
+
+/* Salida del nivel: el botón aparece cuando la flor ya está en el ramo */
+.n5-sigue{position:fixed;left:0;right:0;bottom:34px;margin:0 auto;width:fit-content;z-index:12;animation:n5-sube .5s ease backwards;transition:opacity .5s ease}
+.n5-sigue.fuera{opacity:0;pointer-events:none}

@@ -179,5 +179,217 @@
     soplo(t + 2.3, 0.05, 260, 0.35);
   }
 
-  window.Sonidos = { intentar: intentar, arrancar: arrancar, alejarse: alejarse, acierto: acierto, llegar: llegar };
+  /* Pasar la tapa o una hoja del álbum: dos soplos suaves, el segundo más flojo. */
+  function hoja() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    soplo(t, 0.07, 900, 0.4);
+    soplo(t + 0.5, 0.04, 760, 0.35);
+  }
+
+  /* Voltear una carta: un toque seco y suave. */
+  function voltear() {
+    if (!asegurar()) { return; }
+    soplo(ctx.currentTime + 0.02, 0.06, 700, 0.1);
+  }
+
+  /* Pareja encontrada: dos notas redondas. */
+  function pareja() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    nota(t, 659.25, 0.5, 0.09);
+    nota(t + 0.11, 987.77, 0.75, 0.08);
+  }
+
+  /* Un "boing" corto y simpático: el botón que huye. */
+  function boing() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(330, t);
+    osc.frequency.exponentialRampToValueAtTime(760, t + 0.14);
+    osc.frequency.exponentialRampToValueAtTime(520, t + 0.28);
+    osc.connect(g);
+    g.connect(maestro);
+    envolvente(g, t, 0.09, 0.02, 0.3);
+    osc.start(t);
+    osc.stop(t + 0.35);
+  }
+
+  /* Una pieza de puzzle que encaja: un "clac" corto y una notita redonda. */
+  function encaje() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    soplo(t, 0.07, 900, 0.07);
+    nota(t + 0.02, 740, 0.22, 0.07);
+  }
+
+  /* Un sello que cae sobre el papel: un golpe grave y seco. */
+  function sello() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(190, t);
+    osc.frequency.exponentialRampToValueAtTime(70, t + 0.14);
+    osc.connect(g);
+    g.connect(maestro);
+    envolvente(g, t, 0.16, 0.01, 0.22);
+    osc.start(t);
+    osc.stop(t + 0.27);
+    soplo(t, 0.06, 700, 0.08);
+  }
+
+  /* La barrera sube: un zumbido suave que sube de tono y un golpecito al llegar arriba. */
+  function barrera() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(150, t);
+    osc.frequency.exponentialRampToValueAtTime(270, t + 1.3);
+    osc.connect(g);
+    g.connect(maestro);
+    envolvente(g, t, 0.07, 0.25, 1.5);
+    osc.start(t);
+    osc.stop(t + 1.55);
+    soplo(t + 1.4, 0.05, 500, 0.12);
+  }
+
+  /* Motor del nivel 5 al conducir por el mapa, casi inaudible: un zumbido grave que sube un poco con la velocidad
+     (v de 0 a 1). conduccion(-1) lo apaga del todo. Se actualiza varias veces por segundo, sin crear nodos nuevos. */
+  var motorNodos = null;
+  function conduccion(v) {
+    if (v < 0) {
+      if (motorNodos) {
+        var n = motorNodos;
+        motorNodos = null;
+        var t0 = ctx.currentTime;
+        n.g.gain.setTargetAtTime(0.0001, t0, 0.08);
+        n.o1.stop(t0 + 0.5);
+        n.o2.stop(t0 + 0.5);
+      }
+      return;
+    }
+    if (!asegurar()) { return; }
+    if (!motorNodos) {
+      var o1 = ctx.createOscillator();
+      var o2 = ctx.createOscillator();
+      var filtro = ctx.createBiquadFilter();
+      var g = ctx.createGain();
+      o1.type = 'sawtooth';
+      o2.type = 'triangle';
+      o1.frequency.value = 52;
+      o2.frequency.value = 26;
+      filtro.type = 'lowpass';
+      filtro.frequency.value = 170;
+      filtro.Q.value = 0.7;
+      g.gain.value = 0.0001;
+      o1.connect(filtro);
+      o2.connect(filtro);
+      filtro.connect(g);
+      g.connect(maestro);
+      o1.start(ctx.currentTime);
+      o2.start(ctx.currentTime);
+      motorNodos = { o1: o1, o2: o2, g: g };
+    }
+    var t = ctx.currentTime;
+    var vel = Math.max(0, Math.min(1, v));
+    motorNodos.o1.frequency.setTargetAtTime(52 + vel * 34, t, 0.12);
+    motorNodos.o2.frequency.setTargetAtTime(26 + vel * 17, t, 0.12);
+    motorNodos.g.gain.setTargetAtTime(vel > 0.02 ? 0.01 + vel * 0.022 : 0.0001, t, 0.15);
+  }
+
+  /* El coche llega a la parada que toca: un tintineo de dos notas, muy suave. */
+  function parada() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    nota(t, 880, 0.18, 0.04);
+    nota(t + 0.1, 1175, 0.22, 0.035);
+  }
+
+  /* Se acerca a una parada que aún no toca: un toque grave y corto. */
+  function bloqueado() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.02;
+    nota(t, 196, 0.16, 0.05);
+    soplo(t, 0.02, 500, 0.06);
+  }
+
+  /* Un roce muy suave, al raspar un billete del rasca y gana. */
+  function rasca() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.01;
+    soplo(t, 0.045, 1400, 0.09);
+  }
+
+  /* El tic de una tecla de máquina de escribir, muy suave. */
+  function tecla() {
+    if (!asegurar()) { return; }
+    var t = ctx.currentTime + 0.005;
+    soplo(t, 0.05, 2400, 0.03);
+    nota(t, 1500, 0.04, 0.012);
+  }
+
+  /* ---- Escala pentatónica y sonidos definidos por los niveles ---- */
+
+  var ESCALA_SEMITONOS = [0, 2, 4, 7, 9]; /* pentatónica mayor: do re mi sol la */
+  var DO_CENTRAL = 261.6256;
+
+  /* Frecuencia del grado `grado` (entero): 0 = do central; cada 5 grados sube una octava (negativos bajan). */
+  function escalaFreq(grado) {
+    grado = Math.round(Number(grado));
+    if (!isFinite(grado)) { grado = 0; }
+    grado = Math.max(-10, Math.min(12, grado));
+    var octava = Math.floor(grado / 5);
+    var indice = grado - octava * 5;
+    return DO_CENTRAL * Math.pow(2, (ESCALA_SEMITONOS[indice] + 12 * octava) / 12);
+  }
+
+  /* Una nota de la escala, redonda y suave. vol opcional (0 a 0.2; por defecto 0.07). */
+  function escala(grado, vol) {
+    try {
+      if (!asegurar()) { return; }
+      var v = (typeof vol === 'number' && vol > 0) ? Math.min(vol, 0.2) : 0.07;
+      nota(ctx.currentTime + 0.02, escalaFreq(grado), 0.6, v);
+    } catch (e) { /* el audio nunca debe romper el juego */ }
+  }
+
+  /* Tono con tipo de onda a elegir, para los sonidos que definen los niveles. */
+  function tonoApi(t, frecuencia, duracion, vol, tipo) {
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = (tipo === 'triangle' || tipo === 'square' || tipo === 'sawtooth') ? tipo : 'sine';
+    osc.frequency.setValueAtTime(frecuencia, t);
+    osc.connect(g);
+    g.connect(maestro);
+    envolvente(g, t, vol, Math.min(0.03, duracion / 3), duracion);
+    osc.start(t);
+    osc.stop(t + duracion + 0.05);
+  }
+
+  var NATIVOS = ['intentar', 'arrancar', 'alejarse', 'acierto', 'llegar', 'hoja', 'voltear', 'pareja', 'boing', 'encaje', 'sello', 'barrera', 'conduccion', 'parada', 'bloqueado', 'rasca', 'tecla', 'escala', 'definir'];
+
+  /* Registra Sonidos[nombre](...args). fn se ejecuta con el contexto ya activo y recibe primero la API
+     { ctx, t, destino, tono(t, freq, dur, vol, tipo), soplo(t, vol, corte, dur), escalaFreq(grado), args }
+     y después los argumentos con que se llamó. No se pueden pisar los sonidos nativos. */
+  function definir(nombre, fn) {
+    if (typeof nombre !== 'string' || !/^[A-Za-z_][A-Za-z0-9_]{0,40}$/.test(nombre) || typeof fn !== 'function') { return false; }
+    if (NATIVOS.indexOf(nombre) >= 0) { return false; }
+    window.Sonidos[nombre] = function () {
+      try {
+        if (!asegurar()) { return; }
+        var args = Array.prototype.slice.call(arguments);
+        var api = { ctx: ctx, t: ctx.currentTime + 0.02, destino: maestro, tono: tonoApi, soplo: soplo, escalaFreq: escalaFreq, args: args };
+        fn.apply(null, [api].concat(args));
+      } catch (e) { /* idem */ }
+    };
+    return true;
+  }
+
+  window.Sonidos = { intentar: intentar, arrancar: arrancar, alejarse: alejarse, acierto: acierto, llegar: llegar, hoja: hoja, voltear: voltear, pareja: pareja, boing: boing, encaje: encaje, sello: sello, barrera: barrera, conduccion: conduccion, parada: parada, bloqueado: bloqueado, rasca: rasca, tecla: tecla, escala: escala, definir: definir };
 })();

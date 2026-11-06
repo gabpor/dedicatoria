@@ -1,0 +1,146 @@
+/* ===== Nivel 2 · Barcelona =====
+   Reutiliza la escena, la viñeta del piloto y los paneles de estilos.css, y las olas y la barca de nivel1.css.
+   Aquí, lo propio del nivel: la llegada del coche, la grúa y el álbum con el memory. */
+
+/* El coche llega desde la izquierda y se detiene; al marcharse sale por la derecha. */
+.escena-barcelona .coche-sale{transform:translateX(-1000px)}
+.escena-barcelona.aparca .coche-sale{transform:translateX(0);transition:transform 2.6s cubic-bezier(.12,.62,.28,1)}
+.escena-barcelona.aparca.sale .coche-sale{transform:translateX(1150px);transition:transform 1.7s cubic-bezier(.5,0,.9,.5)}
+
+.grua-carga{transform-box:fill-box;transform-origin:top center;animation:balanceo 5s ease-in-out infinite alternate}
+@keyframes balanceo{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+
+/* ===== Álbum ===== */
+.velo-album{position:absolute;inset:0;z-index:8;background:rgba(6,17,58,.5);opacity:0;pointer-events:none;transition:opacity .9s ease}
+.velo-album.activo{opacity:1}
+
+/* Medidas: --c es el ancho de carta. Tope de 152 px o 10,4 vw, y el que deja que las filas (dos o tres) quepan
+   en la altura de la ventana junto al resto (HUD, barra de recompensa y márgenes: unos 200 px). */
+.mesa-album{
+  --filas:2;
+  --c:min(152px,10.4vw,(100vh - 200px) / (var(--filas) * 1.14 + (var(--filas) - 1) * .1 + .4));
+  --g:calc(var(--c) * .1);
+  --p:calc(var(--c) * .2);
+  --ancho-pag:calc(var(--c) * 3 + var(--g) * 2 + var(--p) * 2);
+  --alto-pag:calc(var(--filas) * var(--c) * 1.14 + (var(--filas) - 1) * var(--g) + var(--p) * 2);
+  position:absolute;left:50%;top:clamp(74px,11vh,112px);z-index:10;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:clamp(14px,2.4vh,24px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.mesa-album.entra{animation:n2-entra .8s ease backwards}
+@keyframes n2-entra{from{opacity:0;transform:translateX(-50%) translateY(34px)}to{opacity:1;transform:translateX(-50%)}}
+.mesa-album.guardado{opacity:0;transform:translateX(-50%) translateY(56px);pointer-events:none}
+
+/* El libro cerrado es solo la mitad derecha, centrada; al abrirse se corre a su sitio mientras la tapa gira. */
+.album{position:relative;width:calc(var(--ancho-pag) * 2);height:var(--alto-pag);perspective:2600px;transform:translateX(calc(var(--ancho-pag) * -.5));transition:transform 1.4s cubic-bezier(.45,0,.2,1)}
+.mesa-album.abierto .album{transform:translateX(0)}
+.album-base,.album-tapa{position:absolute;top:0;left:50%;width:50%;height:100%}
+.album-tapa{transform-origin:left center;transform-style:preserve-3d;transition:transform 1.4s cubic-bezier(.45,0,.2,1)}
+.mesa-album.abierto .album-tapa{transform:rotateY(-180deg)}
+.tapa-frente,.tapa-dorso{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.tapa-dorso{transform:rotateY(180deg)}
+
+/* Páginas: papel crema con sombra junto al lomo */
+.album-base,.tapa-dorso{border:3px solid var(--azul-oscuro);background-color:var(--crema);padding:var(--p)}
+.album-base{border-radius:4px 16px 16px 4px;background-image:linear-gradient(90deg,rgba(12,31,92,.2),rgba(12,31,92,0) 15%);box-shadow:5px 0 0 #f6e6bd,5px 0 0 3px var(--azul-oscuro),0 8px 0 var(--azul-oscuro),0 22px 36px rgba(6,17,58,.35)}
+.tapa-dorso{border-radius:16px 4px 4px 16px;background-image:linear-gradient(270deg,rgba(12,31,92,.2),rgba(12,31,92,0) 15%)}
+.rejilla{display:grid;grid-template-columns:repeat(3,var(--c));gap:var(--g);justify-content:center;align-content:center;height:100%}
+
+/* Portada: botón que abre el álbum */
+.tapa-frente{display:block;padding:0;font:inherit;color:var(--crema);cursor:pointer;border:3px solid var(--azul-oscuro);border-radius:4px 16px 16px 4px;background:var(--azul);box-shadow:0 8px 0 var(--azul-oscuro),0 22px 36px rgba(6,17,58,.35);overflow:hidden;transition:transform .2s ease,filter .2s ease}
+.tapa-frente:hover{filter:brightness(1.08)}
+.tapa-frente:focus-visible{outline:4px solid var(--amarillo);outline-offset:3px}
+.lomo{position:absolute;top:0;bottom:0;left:0;width:11%;background:var(--azul-oscuro);border-right:3px solid #06113a}
+.lomo::after{content:'';position:absolute;top:8%;bottom:8%;left:50%;border-left:3px dashed var(--amarillo);opacity:.8}
+.portada{position:absolute;inset:0 0 0 11%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2%;padding:6%;text-align:center;background:radial-gradient(circle,rgba(250,204,21,.28) 0 2px,transparent 2.5px) 0 0/18px 18px}
+.portada-flor{width:34%;height:auto;overflow:visible;filter:drop-shadow(0 4px 0 rgba(6,17,58,.35))}
+.portada-titulo{display:block;padding:.15em .7em;margin-top:4%;background:var(--crema);color:var(--azul-oscuro);border:3px solid var(--azul-oscuro);border-radius:12px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(20px,2.1vw,32px);line-height:1.1}
+.portada-sub{font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(14px,1.2vw,19px);letter-spacing:.06em;text-transform:uppercase;color:var(--amarillo)}
+.portada-abre{margin-top:6%;padding:.25em 1.1em;background:var(--amarillo);color:var(--azul-oscuro);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(14px,1.15vw,18px);animation:latido-portada 1.6s ease-in-out infinite}
+@keyframes latido-portada{50%{transform:scale(1.07)}}
+
+/* Cartas del memory: dorso azul con amapola; al girar enseñan la foto con marco de papel */
+.carta{position:relative;display:block;width:var(--c);height:calc(var(--c) * 1.14);padding:0;border:0;background:none;font:inherit;cursor:pointer;perspective:700px;transition:transform .25s ease}
+.carta:focus-visible{outline:4px solid var(--amarillo);outline-offset:3px;border-radius:10px}
+.carta:not(.volteada):not(.hecha):hover{transform:translateY(-3px) rotate(-1.2deg)}
+.carta-giro{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.1,.3,1)}
+.carta.volteada .carta-giro,.carta.hecha .carta-giro{transform:rotateY(180deg)}
+.carta-dorso,.carta-cara{position:absolute;inset:0;overflow:hidden;border:3px solid var(--azul-oscuro);border-radius:9px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 4px 0 var(--azul-oscuro)}
+.carta-dorso{display:grid;place-items:center;background:radial-gradient(circle,rgba(250,204,21,.85) 0 2px,transparent 2.5px) 0 0/14px 14px,var(--azul);box-shadow:0 4px 0 var(--azul-oscuro),inset 0 0 0 5px var(--azul),inset 0 0 0 7px var(--amarillo)}
+.carta-dorso svg{width:58%;height:auto;overflow:visible}
+.carta-cara{transform:rotateY(180deg);background:#fffdf6;padding:5% 5% 17%}
+.carta-cara img,.foto-prov{display:block;width:100%;height:100%;object-fit:cover;border:2px solid #e6dcc0;border-radius:3px}
+.foto-prov{display:grid;place-items:center;background:var(--fondo,var(--rosa))}
+.foto-prov svg{width:62%;height:auto;overflow:visible}
+
+/* Al emparejarse, la foto queda sujeta con esquinas y un poco ladeada, como pegada en el álbum */
+.carta.hecha{cursor:pointer;transform:rotate(var(--rot,0deg))}
+.carta-cara::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s ease .2s;
+  background:
+    linear-gradient(135deg,var(--azul-oscuro) 50%,transparent 50%) top left/15% 15% no-repeat,
+    linear-gradient(225deg,var(--azul-oscuro) 50%,transparent 50%) top right/15% 15% no-repeat,
+    linear-gradient(45deg,var(--azul-oscuro) 50%,transparent 50%) bottom left/15% 15% no-repeat,
+    linear-gradient(315deg,var(--azul-oscuro) 50%,transparent 50%) bottom right/15% 15% no-repeat}
+.carta.hecha .carta-cara::after{opacity:1}
+.carta.mal{animation:sacude .4s ease}
+@keyframes sacude{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+/* Al emparejarse, un destello amarillo alrededor de la pareja */
+.carta.destello .carta-cara{animation:destello .9s ease-out}
+@keyframes destello{0%{box-shadow:0 4px 0 var(--azul-oscuro),0 0 0 0 rgba(250,204,21,.95)}100%{box-shadow:0 4px 0 var(--azul-oscuro),0 0 0 18px rgba(250,204,21,0)}}
+
+/* Barra bajo el álbum: contador, recompensa de la pareja y, al terminar, el botón para cerrarlo */
+.recuerdo-barra{width:calc(var(--ancho-pag) * 2);display:flex;align-items:center;gap:14px;opacity:0;transition:opacity .4s ease}
+.mesa-album.abierto .recuerdo-barra{opacity:1;transition:opacity .6s ease 1s}
+.contador{flex:0 0 auto;margin:0;padding:3px 16px;background:var(--amarillo);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;color:var(--azul-oscuro);white-space:nowrap}
+.recuerdo{flex:1;min-width:0;min-height:3.3em;margin:0;display:flex;align-items:center;gap:12px;padding:8px 18px 8px 10px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:14px;box-shadow:0 4px 0 var(--azul-oscuro);font-weight:700;font-size:clamp(15.5px,1.15vw,19px);line-height:1.3}
+.recuerdo.nuevo{animation:n2-sube .5s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes n2-sube{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+.recuerdo-tipo{flex:0 0 auto;padding:1px 12px;border:3px solid var(--azul-oscuro);border-radius:999px;font-family:var(--fuente-titulo);font-weight:800;font-size:.82em;letter-spacing:.05em;text-transform:uppercase;color:var(--azul-oscuro);background:var(--lila)}
+.recuerdo-tipo.tipo-dedicatie{background:var(--coral)}
+.recuerdo-tipo.tipo-intrebare{background:var(--amarillo)}
+.recuerdo-tipo.tipo-indiciu{background:var(--menta)}
+
+.recuerdo-barra .boton{flex:0 0 auto;white-space:nowrap}
+
+.texto-flor{font-size:1.06em;font-weight:600}
+
+/* ===== Visor: la pareja ampliada. Solo la X deja seguir ===== */
+.visor{position:absolute;inset:0;z-index:20;display:grid;place-items:center;grid-template-rows:minmax(0,1fr);padding:78px 16px 20px;background:rgba(6,17,58,.78)}
+.visor.abre{animation:n2-fondo .35s ease both}
+@keyframes n2-fondo{from{opacity:0}to{opacity:1}}
+.visor-tarjeta{position:relative;width:min(560px,92vw);max-height:100%;display:flex;flex-direction:column;gap:14px;padding:18px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 24px 44px rgba(6,17,58,.4)}
+.visor-tarjeta.crece{animation:n2-crece .6s cubic-bezier(.2,1.15,.3,1) both}
+@keyframes n2-crece{from{opacity:.5;transform:translate(var(--dx,0px),var(--dy,0px)) scale(var(--s,.3))}to{opacity:1;transform:none}}
+.visor-foto{position:relative;display:grid;place-items:center;min-height:0;padding:10px;background:#fffdf6;border:3px solid var(--azul-oscuro);border-radius:9px;box-shadow:0 4px 0 var(--azul-oscuro)}
+.visor-foto img{display:block;max-width:100%;max-height:min(46vh,420px);width:auto;height:auto;border:2px solid #e6dcc0;border-radius:3px}
+.visor-foto .foto-prov{width:100%;height:auto;aspect-ratio:4/3;max-height:min(46vh,420px)}
+.visor-foto::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(135deg,var(--azul-oscuro) 50%,transparent 50%) top left/26px 26px no-repeat,
+    linear-gradient(225deg,var(--azul-oscuro) 50%,transparent 50%) top right/26px 26px no-repeat,
+    linear-gradient(45deg,var(--azul-oscuro) 50%,transparent 50%) bottom left/26px 26px no-repeat,
+    linear-gradient(315deg,var(--azul-oscuro) 50%,transparent 50%) bottom right/26px 26px no-repeat}
+.visor-recompensa{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.visor-texto{margin:0;font-weight:700;font-size:clamp(17px,1.45vw,22px);line-height:1.3}
+.visor-cierra{position:absolute;top:-18px;right:-18px;width:46px;height:46px;padding:0;display:grid;place-items:center;border:3px solid var(--azul-oscuro);border-radius:50%;background:var(--amarillo);color:var(--azul-oscuro);box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;font-size:30px;line-height:1;cursor:pointer;transition:transform .08s,box-shadow .08s}
+.visor-cierra:hover{transform:translateY(-1px)}
+.visor-cierra:active{transform:translateY(4px);box-shadow:0 0 0 var(--azul-oscuro)}
+.visor-cierra:focus-visible{outline:4px solid #fff;outline-offset:3px}
+
+
+/* ===== En pareja: de quién es el turno ===== */
+.n2-turno{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;margin:0;padding:3px 14px 3px 10px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 4px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;color:var(--azul-oscuro);white-space:nowrap}
+.n2-turno[hidden]{display:none}
+.n2-turno i{width:14px;height:14px;border-radius:50%;border:2px solid var(--azul-oscuro);background:var(--azul)}
+.n2-turno.amarillo i{background:var(--amarillo)}
+.n2-turno.mio{background:var(--amarillo)}
+.n2-turno.mio i{background:var(--azul-oscuro)}
+.n2-turno.aviso{animation:sacude .4s ease}
+.mesa-album.n2-espera .carta:not(.hecha):not(.volteada){cursor:default}
+.mesa-album.n2-espera .carta:not(.hecha):not(.volteada):hover{transform:none}
+
+/* ===== Salida del nivel: el botón aparece cuando la flor ya está en el ramo ===== */
+.n2-sigue{position:fixed;left:0;right:0;bottom:34px;margin:0 auto;width:fit-content;z-index:12;animation:n2-sube-boton .5s ease backwards;transition:opacity .5s ease}
+.n2-sigue.fuera{opacity:0;pointer-events:none}
+@keyframes n2-sube-boton{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}

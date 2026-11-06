@@ -1,0 +1,146 @@
+/* ===== Nivel 6 · Bélgica: gofres a dos manos =====
+   Reutiliza la escena, la viñeta del piloto y los estilos base de estilos.css. Aquí, lo propio del nivel: la llegada del
+   coche y el puesto de gofres (toldo azul y crema, plancha, bandeja de ingredientes, botellas de salsa, versículo en
+   azúcar y mangos para partir). Todas las clases propias llevan el prefijo n6- o cuelgan de .escena-belgia, porque
+   todos los CSS de los niveles se cargan a la vez. */
+
+/* El coche llega desde la izquierda y se detiene; al marcharse sale por la derecha. */
+.escena-belgia .coche-sale{transform:translateX(-1000px)}
+.escena-belgia.aparca .coche-sale{transform:translateX(0);transition:transform 2.6s cubic-bezier(.12,.62,.28,1)}
+.escena-belgia.aparca.sale .coche-sale{transform:translateX(1150px);transition:transform 1.7s cubic-bezier(.5,0,.9,.5)}
+
+/* Aspas que giran y bandera que ondea */
+.escena-belgia .n6-aspas{transform-box:fill-box;transform-origin:center;animation:n6-gira 16s linear infinite}
+@keyframes n6-gira{to{transform:rotate(360deg)}}
+.escena-belgia .n6-bandera{transform-box:fill-box;transform-origin:left center;animation:n6-ondea 2.6s ease-in-out infinite alternate}
+@keyframes n6-ondea{from{transform:skewY(-3deg) scaleX(1)}to{transform:skewY(3deg) scaleX(.94)}}
+
+/* ===== El puesto ===== */
+.n6-cocina{position:absolute;left:50%;top:clamp(58px,8vh,84px);bottom:clamp(10px,2vh,22px);transform:translateX(-50%);z-index:10;width:min(1080px,97vw);display:flex;flex-direction:column;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 20px 36px rgba(6,17,58,.28);overflow:hidden;font-size:clamp(14px,1.05vw,17px);animation:apareceFicha .7s ease backwards;transition:opacity .7s ease,transform .7s ease}
+.n6-cocina[hidden],.n6-cocina [hidden]{display:none!important}
+.n6-cocina.fuera{opacity:0;transform:translateX(-50%) translateY(-24px);pointer-events:none}
+.n6-grano{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:multiply}
+
+/* Toldo de rayas azules y crema con festón */
+.n6-toldo{position:relative;flex:0 0 auto;height:22px;border-bottom:3px solid var(--azul-oscuro);background:repeating-linear-gradient(90deg,var(--azul) 0 36px,var(--crema) 36px 72px)}
+.n6-toldo::after{content:'';position:absolute;left:0;right:0;top:100%;height:12px;margin-top:3px;background:repeating-linear-gradient(90deg,var(--azul) 0 36px,var(--crema) 36px 72px);-webkit-mask:radial-gradient(18px 12px at 18px 0,#000 97%,transparent 100%) 0 0/36px 12px repeat-x;mask:radial-gradient(18px 12px at 18px 0,#000 97%,transparent 100%) 0 0/36px 12px repeat-x}
+
+.n6-barra{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:14px 20px 0}
+.n6-barra-texto{flex:1;min-width:0}
+.n6-cocina .etiqueta{margin:0!important}
+.n6-titulo{margin:0;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(20px,1.9vw,28px);line-height:1.05;color:var(--azul)}
+.n6-pasos{margin:0;padding:2px 14px;background:var(--amarillo);border:3px solid var(--azul-oscuro);border-radius:999px;box-shadow:0 3px 0 var(--azul-oscuro);font-family:var(--fuente-titulo);font-weight:800;color:var(--azul-oscuro);white-space:nowrap}
+.n6-continua{white-space:nowrap}
+.n6-guia{flex:0 0 auto;margin:4px 20px 0;font-weight:700;color:var(--azul-oscuro)}
+.n6-rol{flex:0 0 auto;margin:0 20px;min-height:1.3em;font-weight:800;font-size:.92em;color:var(--coral-oscuro)}
+
+/* Mesa: columna de mandos o ingredientes | gofre | salsas */
+.n6-mesa{flex:1 1 0;min-height:0;display:grid;grid-template-columns:minmax(120px,170px) 1fr minmax(120px,170px);gap:10px;padding:6px 14px}
+.n6-col{min-height:0;display:flex;flex-direction:column;justify-content:center}
+.n6-centro{position:relative;min-height:0;display:flex;align-items:center;justify-content:center}
+
+/* El gofre: SVG (plancha, masa, gofre, salsas, ingredientes) + letras de azúcar encima */
+.n6-gofre-caja{position:relative;height:100%;max-width:100%;aspect-ratio:520/420;--n6-sep0:0px;--n6-sep1:0px}
+.n6-gofre-int{position:absolute;inset:0;container-type:inline-size;transition:transform .12s ease-out}
+.n6-gofre-int.mitad-0{clip-path:inset(0 50% 0 0);transform:translateX(calc(var(--n6-sep0,0px) * -1))}
+.n6-gofre-int.mitad-1{clip-path:inset(0 0 0 50%);transform:translateX(var(--n6-sep1,0px))}
+.n6-gofre-svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:hidden}
+.n6-gofre{opacity:0;transition:opacity .6s ease}
+.n6-gofre.listo{opacity:1}
+.n6-quemado{opacity:0;transition:opacity .4s ease}
+.n6-quemado.visible{opacity:.85}
+.n6-tapa{transform:translateY(-380px);transition:transform .6s cubic-bezier(.3,1.25,.5,1)}
+.n6-tapa.cerrada{transform:none}
+.n6-chorro{transition:height .08s linear}
+.n6-cocina:not([data-fase="1"]) .n6-jarra-dib,.n6-cocina:not([data-fase="1"]) .n6-chorro{opacity:0}
+.n6-ing-puesto{filter:drop-shadow(0 3px 0 rgba(12,31,92,.35))}
+.n6-salsa-trazo{stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+.n6-salsa-trazo.azul{stroke:#1d4ed8}
+.n6-salsa-trazo.amarilla{stroke:#facc15}
+.n6-guia-trazo{stroke:#fff4d6;stroke-width:4;stroke-dasharray:2 12;stroke-linecap:round;opacity:.9}
+.n6-guia-punto{fill:#fff4d6;stroke:#0c1f5c;stroke-width:3}
+/* Con el azúcar puesta, lo de debajo se atenúa para que el versículo se lea */
+.n6-cocina[data-fase="5"] .n6-deco,.n6-cocina[data-fase="6"] .n6-deco,.n6-cocina[data-fase="7"] .n6-deco{opacity:.42}
+
+/* Versículo escrito con azúcar glas: letras pálidas (plantilla) que se vuelven blancas al pasar por encima */
+.n6-azucar{position:absolute;left:10%;right:10%;top:24%;bottom:15%;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;pointer-events:none;font-family:var(--fuente-titulo);font-weight:800;line-height:1.25;font-size:22px;font-size:4.9cqw}
+.n6-az-tx{display:block}
+.n6-az-linea{display:block}
+.n6-az-ref{display:block;margin-top:.35em;font-size:.82em}
+.n6-pal{display:inline-block;white-space:nowrap}
+.n6-lit{color:rgba(255,244,214,.34);text-shadow:0 1px 0 rgba(12,31,92,.18);transition:color .25s ease,text-shadow .25s ease}
+.n6-lit.puesto{color:#fff;text-shadow:0 0 3px #0c1f5c,0 1px 0 #0c1f5c,0 0 8px rgba(255,255,255,.55)}
+.n6-cocina:not([data-fase="5"]):not([data-fase="6"]):not([data-fase="7"]) .n6-azucar{opacity:0}
+.n6-cocina[data-fase="5"] .n6-gofre-caja{cursor:crosshair;touch-action:none}
+.n6-azucarbtn{position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);z-index:3;white-space:nowrap;font-size:.85em;padding:4px 14px}
+
+/* Mangos para partir el gofre */
+.n6-asa{position:absolute;top:50%;z-index:3;width:46px;height:46px;margin-top:-23px;border-radius:50%;border:3px solid var(--azul-oscuro);background:var(--amarillo);color:var(--azul-oscuro);box-shadow:0 4px 0 var(--azul-oscuro);font-size:18px;font-weight:800;cursor:grab;touch-action:none;transition:transform .12s ease-out}
+.n6-asa:active{cursor:grabbing}
+.n6-asa:focus-visible,.n6-ing:focus-visible,.n6-salsa:focus-visible,.n6-jarra:focus-visible{outline:4px solid var(--amarillo);outline-offset:2px}
+.n6-asa-0{left:-8px;transform:translateX(calc(var(--n6-sep0,0px) * -1))}
+.n6-asa-1{right:-8px;transform:translateX(var(--n6-sep1,0px))}
+.n6-asa.n6-ajeno{opacity:.5;cursor:default}
+
+/* Mandos de los pasos 1 y 2 */
+.n6-mando{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+.n6-jarra{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 6px;font-family:var(--fuente-titulo);font-weight:800;color:var(--azul-oscuro);background:var(--amarillo);border:3px solid var(--azul-oscuro);border-radius:14px;box-shadow:0 4px 0 var(--azul-oscuro);cursor:pointer;touch-action:none;user-select:none;transition:transform .08s,box-shadow .08s}
+.n6-jarra svg{width:64px;height:64px}
+.n6-jarra.vertiendo{transform:translateY(3px) rotate(-8deg);box-shadow:0 1px 0 var(--azul-oscuro)}
+.n6-accion{width:100%}
+.n6-medidor{position:relative;height:22px;background:#fff;border:3px solid var(--azul-oscuro);border-radius:999px;overflow:hidden}
+.n6-med-zona{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(45deg,var(--amarillo) 0 6px,#fde68a 6px 12px);border-left:2px solid var(--azul-oscuro);border-right:2px solid var(--azul-oscuro)}
+.n6-med-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--azul);opacity:.82;transition:width .08s linear}
+.n6-med-leyenda{margin:0;text-align:center;font-weight:800;font-size:.85em;color:var(--azul-oscuro)}
+
+/* Bandeja de ingredientes y botellas de salsa */
+.n6-bandeja,.n6-salsas{display:flex;flex-direction:column;gap:7px;justify-content:center}
+.n6-salsas{align-items:center}
+.n6-salsas.n6-apagado{opacity:.3;pointer-events:none}
+.n6-ing,.n6-salsa{position:relative;display:flex;align-items:center;gap:6px;padding:4px 8px;font-family:var(--fuente-titulo);font-weight:800;font-size:.85em;line-height:1.05;color:var(--azul-oscuro);background:#fff;border:3px solid var(--azul-oscuro);border-radius:12px;box-shadow:0 3px 0 var(--azul-oscuro);cursor:grab;touch-action:none;user-select:none;text-align:left}
+.n6-ing svg{flex:0 0 auto;width:clamp(34px,3.6vw,48px);height:auto;overflow:visible}
+.n6-salsa{flex-direction:row;cursor:grab}
+.n6-salsa svg{flex:0 0 auto;width:clamp(26px,2.6vw,36px);height:auto;overflow:visible}
+.n6-salsa.azul{color:#1d4ed8}
+.n6-salsa.amarilla{color:#facc15}
+.n6-salsa .n6-nom{color:var(--azul-oscuro)}
+.n6-nom{min-width:0}
+.n6-marca{display:none;position:absolute;top:-9px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--amarillo);border:2px solid var(--azul-oscuro);font-style:normal;font-size:11px;line-height:16px;text-align:center;color:var(--azul-oscuro)}
+.n6-mio .n6-marca{display:block}
+.n6-ajeno{opacity:.55}
+.n6-ing.puesto,.n6-salsa.puesto{opacity:1;cursor:pointer;background:#fff4d6}
+.n6-ing.puesto .n6-marca,.n6-salsa.puesto .n6-marca{display:none}
+.n6-ing.cogido,.n6-salsa.cogido{opacity:.45}
+
+/* El ingrediente o la botella que se lleva en la mano */
+.n6-fantasma{position:fixed;z-index:60;left:-100px;top:-100px;width:64px;transform:translate(-50%,-50%) rotate(-6deg);pointer-events:none;filter:drop-shadow(0 4px 0 rgba(12,31,92,.35))}
+.n6-fantasma svg{display:block;width:100%;height:auto;overflow:visible}
+.n6-fantasma.salsa{width:34px;transform:translate(-50%,-6%) rotate(150deg)}
+.n6-fantasma.salsa.azul{color:#1d4ed8}
+.n6-fantasma.salsa.amarilla{color:#facc15}
+
+/* Pie: la carta con el recuerdo o el motivo, y el piloto con su globo */
+.n6-pie{flex:0 0 auto;display:flex;gap:14px;align-items:stretch;min-height:clamp(72px,11vh,100px);padding:6px 14px 12px}
+.n6-carta{flex:1.25;min-width:0;padding:8px 14px;background:#fff;border:3px solid var(--azul-oscuro);border-radius:14px;box-shadow:0 4px 0 var(--azul-oscuro);opacity:.55;transition:opacity .3s ease}
+.n6-carta.visible{opacity:1}
+.n6-cocina .n6-carta p{margin:0}
+.n6-carta-eti{font-family:var(--fuente-titulo);font-weight:800;font-size:.78em;letter-spacing:.05em;text-transform:uppercase;color:var(--coral-oscuro)}
+.n6-carta-titulo{font-family:var(--fuente-titulo);font-weight:800;font-size:1.25em;line-height:1.1;color:var(--azul)}
+.n6-carta-texto{font-weight:700;font-size:.92em;line-height:1.25;color:var(--azul-oscuro)}
+.n6-entra{animation:n6-entra .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes n6-entra{from{transform:scale(.94)}to{transform:scale(1)}}
+.n6-piloto{flex:1;min-width:0;display:flex;align-items:center;gap:12px}
+.n6-coche-mini{flex:0 0 auto;width:clamp(70px,8vw,110px);height:auto}
+.n6-piloto .vineta{flex:1;height:auto;align-items:center}
+.n6-piloto .vineta p{margin:0;font-size:clamp(14px,1.15vw,18px);padding:7px 14px 8px;transform-origin:0 50%}
+.n6-piloto .vineta p::before{left:-22px;bottom:auto;top:50%;margin-top:-11px;border-width:11px 22px 11px 0;border-color:transparent var(--azul-oscuro) transparent transparent}
+.n6-piloto .vineta p::after{left:-15px;bottom:auto;top:50%;margin-top:-8px;border-width:8px 17px 8px 0;border-color:transparent #fff transparent transparent}
+
+@media (prefers-reduced-motion:reduce){
+  .escena-belgia .n6-aspas,.escena-belgia .n6-bandera{animation:none}
+  .n6-tapa,.n6-gofre-int,.n6-chorro,.n6-asa,.n6-entra{transition:none;animation:none}
+}
+@media (max-width:760px){
+  .n6-mesa{grid-template-columns:minmax(90px,120px) 1fr minmax(90px,120px);gap:6px;padding:6px 8px}
+  .n6-pie{flex-direction:column}
+}

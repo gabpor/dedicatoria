@@ -1,0 +1,53 @@
+/* ===== Nivel 0 · Pornirea =====
+   Solo lo propio del nivel: el cordón de tres dobleces (los hilos se dibujan desde JS) y la cinta donde se teje el versículo.
+   La escena, la viñeta del piloto, la entrada y los botones vienen de estilos.css. */
+
+/* El objeto: una tarjeta crema con el cordón arriba y la cinta del versículo debajo */
+.n0-cordon{position:absolute;left:50%;top:clamp(80px,10vh,100px);transform:translateX(-50%);z-index:10;width:min(720px,94vw);box-sizing:border-box;padding:12px 22px 16px;background:var(--crema);border:3px solid var(--azul-oscuro);border-radius:18px;box-shadow:0 6px 0 var(--azul-oscuro),0 20px 36px rgba(6,17,58,.28);text-align:center;transition:opacity .7s ease,transform .7s ease}
+.n0-cordon[hidden]{display:none}
+.n0-cordon.n0-entra{animation:n0-entra .8s ease backwards}
+.n0-cordon.fuera{opacity:0;transform:translateX(-50%) translateY(-24px);pointer-events:none}
+@keyframes n0-entra{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%)}}
+
+.n0-hilos{display:block;width:100%;height:auto;max-height:26vh;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.n0-poste{fill:#b78a5a;stroke:var(--azul-oscuro);stroke-width:3}
+.n0-ancla{fill:var(--amarillo);stroke:var(--azul-oscuro);stroke-width:4}
+.n0-nudo{fill:var(--amarillo);stroke:var(--azul-oscuro);stroke-width:4}
+
+/* Los hilos: contorno oscuro, cuerpo de color y un trenzado fino por encima */
+.n0-hilo-borde{fill:none;stroke:var(--azul-oscuro);stroke-width:17;stroke-linecap:butt;stroke-linejoin:round}
+.n0-hilo-cuerpo{fill:none;stroke-width:11;stroke-linecap:butt;stroke-linejoin:round}
+.n0-hilo-trenza{fill:none;stroke:var(--azul-oscuro);stroke-opacity:.26;stroke-width:11;stroke-dasharray:2 7;stroke-linecap:butt}
+.n0-hilo-borde.n0-redondo,.n0-hilo-cuerpo.n0-redondo{stroke-linecap:round}
+.n0-seg.n0-brilla{filter:drop-shadow(0 0 5px rgba(250,204,21,.95))}
+
+/* El asa del hilo que toca mover */
+.n0-asa{cursor:grab;touch-action:none;outline:none}
+.n0-asa.n0-agarrada{cursor:grabbing}
+.n0-asa-zona{fill:transparent}
+.n0-asa-anillo{fill:none;stroke:var(--amarillo);stroke-width:4;stroke-opacity:.9;transform-box:fill-box;transform-origin:center;animation:n0-late 1.6s ease-in-out infinite}
+.n0-asa.n0-agarrada .n0-asa-anillo{animation:none}
+.n0-asa-bola{stroke:var(--azul-oscuro);stroke-width:4}
+.n0-asa:focus-visible .n0-asa-anillo{stroke:var(--azul);stroke-width:6;animation:none}
+@keyframes n0-late{0%,100%{transform:scale(.85);stroke-opacity:.95}50%{transform:scale(1.12);stroke-opacity:.45}}
+
+.n0-consigna{min-height:1.5em;margin:4px 0 8px;font-family:var(--fuente-titulo);font-weight:800;font-size:clamp(15px,1.15vw,19px);color:var(--azul)}
+
+/* La cinta: el versículo, palabra a palabra, como puntadas que se van cerrando */
+.n0-cinta{position:relative;margin:0 auto;padding:12px 20px 10px;background:#fffdf6;border:3px solid var(--azul-oscuro);border-radius:10px;box-shadow:inset 0 0 0 4px #fffdf6,inset 0 0 0 6px rgba(29,78,216,.45);transition:box-shadow .9s ease,background-color .9s ease}
+.n0-cinta.n0-completa{background:#fffbe8;box-shadow:inset 0 0 0 4px #fffbe8,inset 0 0 0 6px var(--amarillo),0 0 18px rgba(250,204,21,.65)}
+.n0-texto{margin:0;font-family:var(--fuente-titulo);font-weight:700;font-size:clamp(17px,2.1vh,26px);line-height:1.5;color:var(--azul-oscuro)}
+.n0-pal{display:inline-block;padding:0 .08em;color:transparent;border-bottom:3px dotted rgba(12,31,92,.2);transition:color .45s ease,border-color .45s ease}
+.n0-pal.n0-tejida{color:var(--azul-oscuro);border-bottom-color:transparent;animation:n0-teje .6s ease backwards}
+@keyframes n0-teje{from{transform:translateY(5px);text-shadow:0 0 .6em var(--hilo,#facc15)}to{transform:none;text-shadow:0 0 0 transparent}}
+.n0-ref{margin:6px 0 0;font-weight:800;font-size:clamp(14px,1.9vh,19px);color:var(--azul);opacity:0;transition:opacity .8s ease .3s}
+.n0-ref.n0-visible{opacity:1}
+
+.n0-continua{margin-top:12px}
+.n0-continua[hidden]{display:none}
+.n0-continua:not([hidden]){animation:n0-entra-boton .5s ease backwards}
+@keyframes n0-entra-boton{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media (max-width:720px){
+  .n0-cordon{padding:10px 14px 14px}
+}
